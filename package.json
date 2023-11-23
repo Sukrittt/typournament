@@ -6,16 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "drizzle-kit generate:mysql",
+    "db:push": "drizzle-kit push:mysql",
+    "db:introspect": "drizzle-kit introspect:mysql",
+    "db:studio": "drizzle-kit studio --host 127.0.0.1"
   },
   "dependencies": {
     "@auth/core": "^0.18.3",
     "@auth/drizzle-adapter": "^0.3.8",
     "@planetscale/database": "^1.11.0",
+    "@tanstack/react-query": "^5.8.4",
     "@trpc/client": "^10.44.0",
+    "@trpc/react-query": "^10.44.0",
     "@trpc/server": "^10.44.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.0",
     "geist": "^1.1.0",
     "lucide-react": "^0.292.0",
@@ -24,6 +31,7 @@
     "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
+    "superjson": "^2.2.1",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
