@@ -64,6 +64,18 @@ export const users = mysqlTable("user", {
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });
 
+export const request = mysqlTable("request", {
+  id: serial("id").primaryKey(),
+
+  accepted: boolean("accepted").default(false),
+  tournamentId: int("tournamentId").notNull(),
+
+  senderId: varchar("senderId", { length: 255 }).notNull(),
+  receiverId: varchar("receiverId", { length: 255 }).notNull(),
+
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+});
+
 export const tournament = mysqlTable("tournament", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -202,6 +214,34 @@ export const ParticipationRoundsRelations = relations(
     wins: many(round),
   })
 );
+
+//request <-> user (sender)
+export const senderRequestRelation = relations(request, ({ one }) => ({
+  sender: one(users, {
+    fields: [request.senderId],
+    references: [users.id],
+  }),
+}));
+
+//request <-> user (receiver)
+export const receiverRequestRelation = relations(request, ({ one }) => ({
+  receiver: one(users, {
+    fields: [request.receiverId],
+    references: [users.id],
+  }),
+}));
+
+export const UserRequestsRelations = relations(users, ({ many }) => ({
+  requests: many(request),
+}));
+
+//request <-> tournament
+export const tournamentRequestRelation = relations(request, ({ one }) => ({
+  sender: one(tournament, {
+    fields: [request.tournamentId],
+    references: [tournament.id],
+  }),
+}));
 
 // --------------------------------TYPES--------------------------------------//
 export type User = typeof users.$inferSelect;

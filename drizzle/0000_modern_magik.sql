@@ -21,6 +21,16 @@ CREATE TABLE `participation` (
 	CONSTRAINT `participation_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
+CREATE TABLE `request` (
+	`id` serial AUTO_INCREMENT NOT NULL,
+	`accepted` boolean DEFAULT false,
+	`tournamentId` int NOT NULL,
+	`senderId` varchar(255) NOT NULL,
+	`receiverId` varchar(255) NOT NULL,
+	`createdAt` timestamp DEFAULT (now()),
+	CONSTRAINT `request_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `round` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`name` varchar(255) NOT NULL,

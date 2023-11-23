@@ -7,14 +7,14 @@ import { Leagues } from "~/components/leagues";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
 
-export default async function Dashboard() {
+export default function Dashboard() {
   return (
     <div className="container h-screen flex justify-center max-w-3xl flex-col gap-y-8 ">
       <Logout />
       <div className="flex items-center justify-between w-full">
         <h1 className="text-2xl font-extrabold">Typeournament.</h1>
         <span className="cursor-pointer text-sm text-muted-foreground hover:underline underline-offset-4">
-          Tournament requests
+          Tournament Requests
         </span>
       </div>
 
