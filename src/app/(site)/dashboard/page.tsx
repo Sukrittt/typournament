@@ -8,6 +8,8 @@ import { Requests } from "~/components/request";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
 
+export const dynamic = "force-dynamic";
+
 export default function Dashboard() {
   return (
     <div className="container h-screen flex justify-center max-w-3xl flex-col gap-y-8 ">
