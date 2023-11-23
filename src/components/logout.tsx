@@ -20,7 +20,7 @@ export const Logout = () => {
     <Button
       className={cn(
         buttonVariants({ variant: "secondary" }),
-        "rounded-xl shadow-xl w-fit"
+        "rounded-xl shadow-xl w-fit absolute top-4 right-4"
       )}
       disabled={loading}
       onClick={handleLogout}
