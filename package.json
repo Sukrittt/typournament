@@ -41,7 +41,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
-    "drizzle-kit": "^0.20.4",
+    "drizzle-kit": "^0.19.13",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
     "postcss": "^8",

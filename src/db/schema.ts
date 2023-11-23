@@ -68,28 +68,16 @@ export const tournament = mysqlTable("tournament", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
 
-  highestWPM: float("highestWPM").default(0),
+  highestWPM: float("highestWPM"),
   endedAt: timestamp("endedAt", { mode: "date" }),
+  winnerId: varchar("winnerId", { length: 255 }),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });
 
 export const participation = mysqlTable("participation", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
 
-  average: float("average").default(0),
   userId: varchar("userId", { length: 255 }).notNull(),
-  tournamentId: int("tournamentId").notNull(),
-
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
-});
-
-export const score = mysqlTable("score", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-
-  score: float("score").notNull(),
-  participationId: varchar("participationId", { length: 255 }),
   tournamentId: int("tournamentId").notNull(),
 
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
@@ -99,31 +87,29 @@ export const round = mysqlTable("round", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
 
-  average: float("average").default(0),
-  winnerId: varchar("userId", { length: 255 }),
+  winnerId: varchar("winnerId", { length: 255 }),
   tournamentId: int("tournamentId").notNull(),
   draw: boolean("draw").default(false),
 
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
 });
 
+export const score = mysqlTable("score", {
+  id: serial("id").primaryKey(),
+
+  point: int("score").notNull(),
+  average: float("average").notNull(),
+  participationId: varchar("participationId", { length: 255 }),
+  roundId: int("roundId").notNull(),
+
+  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+});
+
 // --------------------------------RELATIONS--------------------------------------//
-
-// users <-> rounds
-export const roundsRelation = relations(round, ({ one }) => ({
-  author: one(users, {
-    fields: [round.winnerId],
-    references: [users.id],
-  }),
-}));
-
-export const UserRoundsRelations = relations(users, ({ many }) => ({
-  rounds: many(round),
-}));
 
 // users <-> participations
 export const participationRelation = relations(participation, ({ one }) => ({
-  author: one(users, {
+  user: one(users, {
     fields: [participation.userId],
     references: [users.id],
   }),
@@ -133,11 +119,23 @@ export const UserParticipantsRelations = relations(users, ({ many }) => ({
   participants: many(participation),
 }));
 
+// users <-> tournament
+export const tournamentRelation = relations(tournament, ({ one }) => ({
+  winner: one(users, {
+    fields: [tournament.winnerId],
+    references: [users.id],
+  }),
+}));
+
+export const UserTournamentsRelations = relations(users, ({ many }) => ({
+  trophies: many(tournament),
+}));
+
 // tournament <-> participation
 export const tournamentParticipationRelation = relations(
   participation,
   ({ one }) => ({
-    author: one(tournament, {
+    tournament: one(tournament, {
       fields: [participation.tournamentId],
       references: [tournament.id],
     }),
@@ -153,7 +151,7 @@ export const tournamentParticipationRelations = relations(
 
 // tournament <-> round
 export const tournamentRoundRelation = relations(round, ({ one }) => ({
-  author: one(tournament, {
+  tournament: one(tournament, {
     fields: [round.tournamentId],
     references: [tournament.id],
   }),
@@ -163,23 +161,23 @@ export const tournamentRoundRelations = relations(tournament, ({ many }) => ({
   rounds: many(round),
 }));
 
-// tournament <-> score
-export const tournamentScoreRelation = relations(score, ({ one }) => ({
-  author: one(tournament, {
-    fields: [score.tournamentId],
-    references: [tournament.id],
+// round <-> score
+export const roundScoreRelation = relations(score, ({ one }) => ({
+  round: one(round, {
+    fields: [score.roundId],
+    references: [round.id],
   }),
 }));
 
-export const tournamentScoreRelations = relations(tournament, ({ many }) => ({
+export const roundScoreRelations = relations(round, ({ many }) => ({
   scores: many(score),
 }));
 
 // participation <-> score
 export const participationScoreRelation = relations(score, ({ one }) => ({
-  author: one(participation, {
+  participant: one(participation, {
     fields: [score.participationId],
-    references: [participation.id],
+    references: [participation.userId],
   }),
 }));
 
@@ -187,6 +185,21 @@ export const participationScoreRelations = relations(
   participation,
   ({ many }) => ({
     scores: many(score),
+  })
+);
+
+// participation <-> round
+export const participationRoundRelation = relations(round, ({ one }) => ({
+  winner: one(participation, {
+    fields: [round.winnerId],
+    references: [participation.userId],
+  }),
+}));
+
+export const ParticipationRoundsRelations = relations(
+  participation,
+  ({ many }) => ({
+    wins: many(round),
   })
 );
 
