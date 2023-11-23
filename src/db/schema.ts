@@ -220,6 +220,7 @@ export const senderRequestRelation = relations(request, ({ one }) => ({
   sender: one(users, {
     fields: [request.senderId],
     references: [users.id],
+    relationName: "senderRelation",
   }),
 }));
 
@@ -228,19 +229,20 @@ export const receiverRequestRelation = relations(request, ({ one }) => ({
   receiver: one(users, {
     fields: [request.receiverId],
     references: [users.id],
+    relationName: "receiverRelation",
   }),
-}));
-
-export const UserRequestsRelations = relations(users, ({ many }) => ({
-  requests: many(request),
 }));
 
 //request <-> tournament
 export const tournamentRequestRelation = relations(request, ({ one }) => ({
-  sender: one(tournament, {
+  tournament: one(tournament, {
     fields: [request.tournamentId],
     references: [tournament.id],
   }),
+}));
+
+export const TournamentRequestRelations = relations(tournament, ({ many }) => ({
+  requests: many(request),
 }));
 
 // --------------------------------TYPES--------------------------------------//
@@ -249,3 +251,4 @@ export type Tournament = typeof tournament.$inferSelect;
 export type Participation = typeof participation.$inferSelect;
 export type Round = typeof round.$inferSelect;
 export type Score = typeof score.$inferSelect;
+export type Request = typeof request.$inferSelect;

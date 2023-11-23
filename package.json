@@ -10,7 +10,7 @@
     "postinstall": "drizzle-kit generate:mysql",
     "db:push": "drizzle-kit push:mysql",
     "db:introspect": "drizzle-kit introspect:mysql",
-    "db:studio": "drizzle-kit studio --host 127.0.0.1"
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@auth/core": "^0.18.3",

@@ -27,6 +27,7 @@ export const tournamentRouter = createTRPCRouter({
       const parsedEmailIds = input.emailIds.filter(
         (emailId) => emailId !== ctx.emailId
       );
+
       const requestedUserIds = await getUserIdsByEmail(parsedEmailIds);
 
       await Promise.all(
