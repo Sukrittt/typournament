@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
-import { Loader2, LucideProps } from "lucide-react";
+import { Loader, LucideProps } from "lucide-react";
 
 import { Card } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
@@ -46,7 +46,7 @@ export const AuthForm = () => {
         >
           <div className="flex items-center justify-center">
             {isLoading == "google" ? (
-              <Loader2 className="mr-3 animate-spin h-5 w-5" />
+              <Loader className="mr-3 animate-spin h-5 w-5" />
             ) : (
               <IconGoogle className="mr-3 h-5 w-5" />
             )}
@@ -60,7 +60,7 @@ export const AuthForm = () => {
         >
           <div className="flex items-center justify-center">
             {isLoading == "github" ? (
-              <Loader2 className="mr-3 animate-spin h-5 w-5" />
+              <Loader className="mr-3 animate-spin h-5 w-5" />
             ) : (
               <IconGithub className="mr-3 h-5 w-5" />
             )}

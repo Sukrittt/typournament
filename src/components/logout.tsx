@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
-import { Loader2, LogOut } from "lucide-react";
+import { Loader, LogOut } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import { Button, buttonVariants } from "~/components/ui/button";
@@ -26,7 +26,7 @@ export const Logout = () => {
       onClick={handleLogout}
     >
       {loading ? (
-        <Loader2 className="animate-spin mr-2 h-4 w-4" />
+        <Loader className="animate-spin mr-2 h-4 w-4" />
       ) : (
         <LogOut className="h-4 w-4 mr-2" />
       )}

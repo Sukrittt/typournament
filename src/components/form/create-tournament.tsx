@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader, Plus, Trash2 } from "lucide-react";
 
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
@@ -141,11 +141,7 @@ export const CreateTournament = () => {
           )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              "Create"
-            )}
+            {isLoading ? <Loader className="h-4 w-4 animate-spin" /> : "Create"}
           </Button>
         </form>
       </Form>
