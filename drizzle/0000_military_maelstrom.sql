@@ -23,7 +23,7 @@ CREATE TABLE `participation` (
 --> statement-breakpoint
 CREATE TABLE `request` (
 	`id` serial AUTO_INCREMENT NOT NULL,
-	`accepted` boolean DEFAULT false,
+	`status` varchar(255) DEFAULT 'pending',
 	`tournamentId` int NOT NULL,
 	`senderId` varchar(255) NOT NULL,
 	`receiverId` varchar(255) NOT NULL,
@@ -61,6 +61,7 @@ CREATE TABLE `session` (
 CREATE TABLE `tournament` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`name` varchar(255) NOT NULL,
+	`creatorId` varchar(255) NOT NULL,
 	`highestWPM` float,
 	`endedAt` timestamp,
 	`winnerId` varchar(255),

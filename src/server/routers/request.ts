@@ -10,7 +10,7 @@ export const requestRouter = createTRPCRouter({
       .select()
       .from(request)
       .where(
-        and(eq(request.receiverId, ctx.userId), eq(request.accepted, false))
+        and(eq(request.receiverId, ctx.userId), eq(request.status, "pending"))
       )
       .innerJoin(tournament, eq(tournament.id, request.tournamentId))
       .innerJoin(users, eq(request.senderId, users.id))

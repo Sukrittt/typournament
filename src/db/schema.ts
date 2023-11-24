@@ -67,7 +67,10 @@ export const users = mysqlTable("user", {
 export const request = mysqlTable("request", {
   id: serial("id").primaryKey(),
 
-  accepted: boolean("accepted").default(false),
+  status: varchar("status", {
+    length: 255,
+    enum: ["pending", "accepted", "declined"],
+  }).default("pending"),
   tournamentId: int("tournamentId").notNull(),
 
   senderId: varchar("senderId", { length: 255 }).notNull(),
@@ -79,6 +82,7 @@ export const request = mysqlTable("request", {
 export const tournament = mysqlTable("tournament", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
+  creatorId: varchar("creatorId", { length: 255 }).notNull(),
 
   highestWPM: float("highestWPM"),
   endedAt: timestamp("endedAt", { mode: "date" }),
@@ -131,7 +135,7 @@ export const UserParticipantsRelations = relations(users, ({ many }) => ({
   participants: many(participation),
 }));
 
-// users <-> tournament
+// users (winner) <-> tournament
 export const tournamentRelation = relations(tournament, ({ one }) => ({
   winner: one(users, {
     fields: [tournament.winnerId],
@@ -139,8 +143,20 @@ export const tournamentRelation = relations(tournament, ({ one }) => ({
   }),
 }));
 
+// users (creator) <-> tournament
+export const tournamentCreatorRelation = relations(tournament, ({ one }) => ({
+  winner: one(users, {
+    fields: [tournament.creatorId],
+    references: [users.id],
+  }),
+}));
+
 export const UserTournamentsRelations = relations(users, ({ many }) => ({
   trophies: many(tournament),
+}));
+
+export const UserTournamentCreatorRelations = relations(users, ({ many }) => ({
+  tournamentCreated: many(tournament),
 }));
 
 // tournament <-> participation

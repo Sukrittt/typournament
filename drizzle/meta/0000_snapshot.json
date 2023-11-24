@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "4a1b927d-a2ef-462e-aefd-d97b8a20de53",
+  "id": "9e8d757f-14a4-43c1-b846-3b4f4b24453c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -153,13 +153,13 @@
           "notNull": true,
           "autoincrement": true
         },
-        "accepted": {
-          "name": "accepted",
-          "type": "boolean",
+        "status": {
+          "name": "status",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": false
+          "default": "'pending'"
         },
         "tournamentId": {
           "name": "tournamentId",
@@ -371,6 +371,13 @@
         },
         "name": {
           "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "creatorId": {
+          "name": "creatorId",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,

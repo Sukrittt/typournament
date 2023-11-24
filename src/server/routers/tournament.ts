@@ -20,6 +20,7 @@ export const tournamentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const createdTournament = await db.insert(tournament).values({
         name: input.name,
+        creatorId: ctx.userId,
       });
 
       const tournamentId = parseInt(createdTournament.insertId);
