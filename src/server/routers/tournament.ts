@@ -1,8 +1,9 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 import { db } from "~/db";
 import { createTournamentSchema } from "~/lib/validators";
 import { createTRPCRouter, privateProcedure } from "~/server/trpc";
+import { participationRouter } from "~/server/routers/participant";
 import { participation, request, tournament, users } from "~/db/schema";
 
 export const tournamentRouter = createTRPCRouter({
@@ -11,9 +12,22 @@ export const tournamentRouter = createTRPCRouter({
       .select()
       .from(participation)
       .where(eq(participation.userId, ctx.userId))
-      .innerJoin(tournament, eq(tournament.id, participation.tournamentId));
+      .innerJoin(tournament, eq(tournament.id, participation.tournamentId))
+      .innerJoin(users, eq(users.id, tournament.creatorId))
+      .orderBy(desc(tournament.createdAt));
 
-    return userTournaments;
+    const caller = participationRouter.createCaller(ctx);
+
+    const tournamentsWithParticipantCount = await Promise.all(
+      userTournaments.map(async (league) => {
+        const participantCount = await caller.getParticipantCount({
+          tournamentId: league.tournament.id,
+        });
+        return { ...league, participantCount };
+      })
+    );
+
+    return tournamentsWithParticipantCount;
   }),
   createTournament: privateProcedure
     .input(createTournamentSchema)
@@ -36,6 +50,11 @@ export const tournamentRouter = createTRPCRouter({
           await sendRequest(ctx.userId, userId, tournamentId);
         })
       );
+
+      await db.insert(participation).values({
+        tournamentId,
+        userId: ctx.userId,
+      });
 
       return { tournamentId };
     }),

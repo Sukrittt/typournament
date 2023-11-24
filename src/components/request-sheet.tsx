@@ -1,18 +1,16 @@
 "use client";
-import { Button } from "~/components/ui/button";
-import { Label } from "~/components/ui/label";
+
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
-
 import { ExtendedRequest } from "~/types";
+import { Separator } from "~/components/ui/separator";
+import { RequestCard } from "~/components/card/request-card";
 
 export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
   return (
@@ -22,25 +20,28 @@ export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
           Tournament Requests
         </span>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="min-w-[600px]">
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
+          <SheetTitle>Tournament Requests</SheetTitle>
           <SheetDescription>
-            Make changes to your profile here. Click save when you&rsquo;re
-            done.
+            View your tournament requests and their status.
           </SheetDescription>
         </SheetHeader>
-        {data.requests.length === 0 && <p>No requests</p>}
-        {data.requests.map((data) => (
-          <div key={data.request.id} className="flex flex-col gap-y-4">
-            <Label>{data.sender.name}</Label>
-          </div>
-        ))}
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
+        <Separator className="my-4" />
+        {data.requests.length === 0 && (
+          <p className="text-sm text-muted-foreground text-center">
+            There are currently no requests.
+          </p>
+        )}
+        <div className="flex flex-col gap-y-4">
+          {data.requests.map((singleRequest) => (
+            <RequestCard
+              key={singleRequest.request.id}
+              requestData={singleRequest}
+              tournament={data.tournament}
+            />
+          ))}
+        </div>
       </SheetContent>
     </Sheet>
   );

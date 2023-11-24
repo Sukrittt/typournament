@@ -1,8 +1,10 @@
 import { Participation, Request, Tournament, User } from "~/db/schema";
 
 export type League = {
-  participation: Participation;
+  user: User;
   tournament: Tournament;
+  participantCount: number;
+  participation: Participation;
 };
 
 export type ExtendedRequest = {

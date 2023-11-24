@@ -13,7 +13,7 @@ export const Leagues = async () => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-3 gap-4">
       {leagues.map((league) => (
         <LeagueCard key={league.participation.id} league={league} />
       ))}

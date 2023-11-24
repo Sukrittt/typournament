@@ -7,13 +7,17 @@ import { Leagues } from "~/components/leagues";
 import { Requests } from "~/components/request";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
+import { getAuthSession } from "~/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await getAuthSession();
+
   return (
-    <div className="container h-screen flex justify-center max-w-3xl flex-col gap-y-8 ">
+    <div className="container h-screen flex justify-center max-w-5xl flex-col gap-y-8 ">
       <Logout />
+      {session?.user.email}
       <div className="flex items-center justify-between w-full">
         <h1 className="text-2xl font-extrabold">Typeournament.</h1>
         <Suspense fallback={<p>Loading...</p>}>
