@@ -136,27 +136,28 @@ export const UserParticipantsRelations = relations(users, ({ many }) => ({
 }));
 
 // users (winner) <-> tournament
+// users (creator) <-> tournament
 export const tournamentRelation = relations(tournament, ({ one }) => ({
   winner: one(users, {
     fields: [tournament.winnerId],
     references: [users.id],
+    relationName: "winnerRelation",
   }),
-}));
-
-// users (creator) <-> tournament
-export const tournamentCreatorRelation = relations(tournament, ({ one }) => ({
-  winner: one(users, {
+  creator: one(users, {
     fields: [tournament.creatorId],
     references: [users.id],
+    relationName: "creatorRelation",
   }),
 }));
 
 export const UserTournamentsRelations = relations(users, ({ many }) => ({
-  trophies: many(tournament),
+  trophies: many(tournament, { relationName: "winnerRelation" }),
 }));
 
 export const UserTournamentCreatorRelations = relations(users, ({ many }) => ({
-  tournamentCreated: many(tournament),
+  tournamentCreated: many(tournament, {
+    relationName: "creatorRelation",
+  }),
 }));
 
 // tournament <-> participation
@@ -232,16 +233,13 @@ export const ParticipationRoundsRelations = relations(
 );
 
 //request <-> user (sender)
+//request <-> user (receiver)
 export const senderRequestRelation = relations(request, ({ one }) => ({
   sender: one(users, {
     fields: [request.senderId],
     references: [users.id],
     relationName: "senderRelation",
   }),
-}));
-
-//request <-> user (receiver)
-export const receiverRequestRelation = relations(request, ({ one }) => ({
   receiver: one(users, {
     fields: [request.receiverId],
     references: [users.id],
