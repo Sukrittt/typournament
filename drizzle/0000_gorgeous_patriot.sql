@@ -33,7 +33,6 @@ CREATE TABLE `request` (
 --> statement-breakpoint
 CREATE TABLE `round` (
 	`id` serial AUTO_INCREMENT NOT NULL,
-	`name` varchar(255) NOT NULL,
 	`winnerId` varchar(255),
 	`tournamentId` int NOT NULL,
 	`draw` boolean DEFAULT false,
@@ -63,6 +62,7 @@ CREATE TABLE `tournament` (
 	`name` varchar(255) NOT NULL,
 	`creatorId` varchar(255) NOT NULL,
 	`highestWPM` float,
+	`highestWPMUserId` varchar(255),
 	`endedAt` timestamp,
 	`winnerId` varchar(255),
 	`createdAt` timestamp DEFAULT (now()),

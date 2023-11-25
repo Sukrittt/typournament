@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "2b8daa03-7e55-414d-8ee1-0cecee9f55c8",
+  "id": "cfac0f02-3401-43a8-94d0-ee5b47ce0930",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -213,13 +213,6 @@
           "notNull": true,
           "autoincrement": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "winnerId": {
           "name": "winnerId",
           "type": "varchar(255)",
@@ -386,6 +379,13 @@
         "highestWPM": {
           "name": "highestWPM",
           "type": "float",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "highestWPMUserId": {
+          "name": "highestWPMUserId",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

@@ -85,6 +85,8 @@ export const tournament = mysqlTable("tournament", {
   creatorId: varchar("creatorId", { length: 255 }).notNull(),
 
   highestWPM: float("highestWPM"),
+  highestWPMUserId: varchar("highestWPMUserId", { length: 255 }),
+
   endedAt: timestamp("endedAt", { mode: "date" }),
   winnerId: varchar("winnerId", { length: 255 }),
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
@@ -101,7 +103,6 @@ export const participation = mysqlTable("participation", {
 
 export const round = mysqlTable("round", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
 
   winnerId: varchar("winnerId", { length: 255 }),
   tournamentId: int("tournamentId").notNull(),
@@ -137,6 +138,7 @@ export const UserParticipantsRelations = relations(users, ({ many }) => ({
 
 // users (winner) <-> tournament
 // users (creator) <-> tournament
+// users (recordHolder) <-> tournament
 export const tournamentRelation = relations(tournament, ({ one }) => ({
   winner: one(users, {
     fields: [tournament.winnerId],
@@ -147,6 +149,11 @@ export const tournamentRelation = relations(tournament, ({ one }) => ({
     fields: [tournament.creatorId],
     references: [users.id],
     relationName: "creatorRelation",
+  }),
+  recordHolder: one(users, {
+    fields: [tournament.highestWPMUserId],
+    references: [users.id],
+    relationName: "recordHolderRelation",
   }),
 }));
 
@@ -159,6 +166,15 @@ export const UserTournamentCreatorRelations = relations(users, ({ many }) => ({
     relationName: "creatorRelation",
   }),
 }));
+
+export const UserTournamentRecordHolderRelations = relations(
+  users,
+  ({ many }) => ({
+    tournamentCreated: many(tournament, {
+      relationName: "recordHolderRelation",
+    }),
+  })
+);
 
 // tournament <-> participation
 export const tournamentParticipationRelation = relations(

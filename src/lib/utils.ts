@@ -28,3 +28,7 @@ export function getCustomizedUserName({
       return username.split(" ")[0].slice(0, 3).toUpperCase();
   }
 }
+
+export function isValidFloat(value: number | string) {
+  return typeof value === "number" && !isNaN(value) && isFinite(value);
+}

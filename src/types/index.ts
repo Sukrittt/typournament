@@ -20,3 +20,8 @@ export type ExtendedParticipantType = {
   participation: Participation;
   scores: Score[];
 };
+
+export type RoundFlow = {
+  onBackStep?: () => void;
+  onNextStep?: () => void;
+};

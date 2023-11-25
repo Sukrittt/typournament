@@ -6,3 +6,22 @@ export const createTournamentSchema = z.object({
 });
 
 export type CreateTournamentValidator = z.infer<typeof createTournamentSchema>;
+
+export const createRoundSchema = z.object({
+  tournamentId: z.number(),
+  winnerId: z.string().optional(),
+  draw: z.boolean().optional(),
+  rounds: z.array(
+    z.object({
+      participationId: z.number(),
+      average: z.number(),
+      point: z.number(),
+    })
+  ),
+});
+
+export type CreateRoundValidator = z.infer<typeof createRoundSchema>;
+export type RoundSchema = Omit<
+  CreateRoundValidator,
+  "tournamentId" | "winnerId" | "draw"
+>;

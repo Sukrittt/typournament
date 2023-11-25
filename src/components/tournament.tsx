@@ -1,19 +1,19 @@
+import { Fragment } from "react";
 import { redirect } from "next/navigation";
 import { LucideProps } from "lucide-react";
 import { serverClient } from "~/trpc/server-client";
 
-import { buttonVariants } from "~/components/ui/button";
 import Link from "next/link";
-import { getAuthSession } from "~/lib/auth";
 import { Round } from "~/db/schema";
+import { getAuthSession } from "~/lib/auth";
+import UserAvatar from "~/components/avatar";
 import { ExtendedParticipantType } from "~/types";
-import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { getCustomizedUserName } from "~/lib/utils";
-import { FormCircle } from "./form-circle";
-import { Card, CardContent, CardHeader } from "./ui/card";
-import { Separator } from "./ui/separator";
-import UserAvatar from "./avatar";
-import { Fragment } from "react";
+import { FormCircle } from "~/components/form-circle";
+import { Separator } from "~/components/ui/separator";
+import { buttonVariants } from "~/components/ui/button";
+import { useParticipantScores } from "~/hooks/useParticipantScores";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +60,6 @@ export const Tournament = async ({
                 <ParticipantRow
                   participant={participant}
                   rounds={league.rounds}
-                  userId={session?.user.id}
                 />
                 {index < league.participants.length - 1 && <Separator />}
               </Fragment>
@@ -69,7 +68,7 @@ export const Tournament = async ({
         </Card>
       </div>
       <div className="flex items-center justify-center mt-8">
-        <Link className={buttonVariants()} href="/r/create">
+        <Link className={buttonVariants()} href={`/t/${tournamentId}/add`}>
           Add Round Results
           <IconArrowright className="ml-2 h-4 w-4" />
         </Link>
@@ -79,26 +78,18 @@ export const Tournament = async ({
 };
 
 interface ParticipantRowProps {
-  userId: string;
   participant: ExtendedParticipantType;
   rounds: Round[];
 }
-const ParticipantRow = ({
-  participant,
-  rounds,
-  userId,
-}: ParticipantRowProps) => {
-  const { totalPoints, totalWins, totalLoss, totalAvg, recentForm } =
+const ParticipantRow = ({ participant, rounds }: ParticipantRowProps) => {
+  const { totalPoints, totalWins, totalLoss, totalDraw, totalAvg, recentForm } =
     useParticipantScores({
       participant,
       rounds,
-      userId,
     });
   const participantName = getCustomizedUserName({
     username: participant.user.name,
   }); //use short for sm device
-
-  const totalDraws = rounds.length - totalWins - totalLoss;
 
   return (
     <div className="grid grid-cols-13 py-2 text-neutral-200 items-center">
@@ -109,9 +100,9 @@ const ParticipantRow = ({
       </div>
       <p className="text-sm">{rounds.length}</p>
       <p className="text-sm">{totalWins}</p>
-      <p className="text-sm">{totalDraws}</p>
+      <p className="text-sm">{totalDraw}</p>
       <p className="text-sm">{totalLoss}</p>
-      <p className="text-sm">{totalAvg}</p>
+      <p className="text-sm">{totalAvg.toFixed(2)}</p>
       <p className="text-sm">{totalPoints}</p>
       <div className="flex justify-around items-center col-span-4">
         {recentForm.map((form, index) => (
