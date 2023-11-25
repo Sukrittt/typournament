@@ -26,7 +26,7 @@ export default async function Dashboard() {
       </div>
 
       <Link href="/t/create" className={cn(buttonVariants(), "w-full")}>
-        Create Tournament
+        Create Typournament
       </Link>
 
       <Separator />

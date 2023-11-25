@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
@@ -7,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Plus, Trash2 } from "lucide-react";
 
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,6 +21,7 @@ import {
   CreateTournamentValidator,
   createTournamentSchema,
 } from "~/lib/validators";
+import { cn } from "~/lib/utils";
 import { trpc } from "~/trpc/client";
 import { Separator } from "~/components/ui/separator";
 
@@ -88,11 +90,22 @@ export const CreateTournament = () => {
 
   return (
     <div className="h-screen flex flex-col justify-center mx-auto max-w-md space-y-8">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Create a Tournament</h1>
-        <p className="text-muted-foreground">
-          Fill in the details below to create a new tournament
-        </p>
+      <div className="space-y-2">
+        <Link
+          href="/dashboard"
+          className={cn(
+            buttonVariants({ variant: "link" }),
+            "text-white w-fit"
+          )}
+        >
+          Go Back
+        </Link>
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold">Create a Tournament</h1>
+          <p className="text-muted-foreground">
+            Fill in the details below to create a new tournament
+          </p>
+        </div>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

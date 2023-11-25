@@ -1,14 +1,26 @@
+import { z } from "zod";
 import { desc, eq } from "drizzle-orm";
 
 import { db } from "~/db";
 import { createTournamentSchema } from "~/lib/validators";
 import { createTRPCRouter, privateProcedure } from "~/server/trpc";
 import { participationRouter } from "~/server/routers/participant";
-import { participation, request, tournament, users } from "~/db/schema";
+import {
+  Participation,
+  Round,
+  Tournament,
+  User,
+  participation,
+  request,
+  round,
+  score,
+  tournament,
+  users,
+} from "~/db/schema";
 
 export const tournamentRouter = createTRPCRouter({
-  getUserTournaments: privateProcedure.query(async ({ ctx }) => {
-    const userTournaments = await db
+  getUserParticipations: privateProcedure.query(async ({ ctx }) => {
+    const userParticipations = await db
       .select()
       .from(participation)
       .where(eq(participation.userId, ctx.userId))
@@ -19,7 +31,7 @@ export const tournamentRouter = createTRPCRouter({
     const caller = participationRouter.createCaller(ctx);
 
     const tournamentsWithParticipantCount = await Promise.all(
-      userTournaments.map(async (league) => {
+      userParticipations.map(async (league) => {
         const participantCount = await caller.getParticipantCount({
           tournamentId: league.tournament.id,
         });
@@ -29,6 +41,67 @@ export const tournamentRouter = createTRPCRouter({
 
     return tournamentsWithParticipantCount;
   }),
+  getLeague: privateProcedure
+    .input(
+      z.object({
+        tournamentId: z.number(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const caller = participationRouter.createCaller(ctx);
+
+      const promises: [
+        Promise<Tournament[]>,
+        Promise<number>,
+        Promise<{ user: User; participation: Participation }[]>,
+        Promise<Round[]>
+      ] = [
+        db
+          .select()
+          .from(tournament)
+          .where(eq(tournament.id, input.tournamentId)),
+        caller.getParticipantCount({
+          tournamentId: input.tournamentId,
+        }),
+        db
+          .select()
+          .from(participation)
+          .where(eq(participation.tournamentId, input.tournamentId))
+          .innerJoin(users, eq(users.id, participation.userId)),
+        db
+          .select()
+          .from(round)
+          .where(eq(round.tournamentId, input.tournamentId)),
+      ];
+
+      const [selectedTournaments, participantCount, participants, rounds] =
+        await Promise.all(promises);
+
+      const tournamentInfo = selectedTournaments[0];
+
+      const updatedParticipants = await Promise.all(
+        participants.map(async (participant) => {
+          const scores = await db
+            .select()
+            .from(score)
+            .where(eq(score.participationId, participant.participation.id));
+
+          return {
+            ...participant,
+            scores,
+          };
+        })
+      );
+
+      const tournamentObj = {
+        tournamentInfo,
+        participants: updatedParticipants,
+        rounds,
+        participantCount,
+      };
+
+      return tournamentObj;
+    }),
   createTournament: privateProcedure
     .input(createTournamentSchema)
     .mutation(async ({ ctx, input }) => {

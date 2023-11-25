@@ -2,7 +2,7 @@ import { LeagueCard } from "~/components/card/league-card";
 import { serverClient } from "~/trpc/server-client";
 
 export const Leagues = async () => {
-  const leagues = await serverClient.tournament.getUserTournaments();
+  const leagues = await serverClient.tournament.getUserParticipations();
 
   if (leagues.length === 0) {
     return (

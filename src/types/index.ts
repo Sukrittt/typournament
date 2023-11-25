@@ -1,4 +1,4 @@
-import { Participation, Request, Tournament, User } from "~/db/schema";
+import { Participation, Request, Score, Tournament, User } from "~/db/schema";
 
 export type League = {
   user: User;
@@ -13,4 +13,10 @@ export type ExtendedRequest = {
     request: Request;
     sender: User;
   }[];
+};
+
+export type ExtendedParticipantType = {
+  user: User;
+  participation: Participation;
+  scores: Score[];
 };

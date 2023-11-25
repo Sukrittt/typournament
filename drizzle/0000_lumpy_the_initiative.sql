@@ -45,7 +45,7 @@ CREATE TABLE `score` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`score` int NOT NULL,
 	`average` float NOT NULL,
-	`participationId` varchar(255),
+	`participationId` int NOT NULL,
 	`roundId` int NOT NULL,
 	`createdAt` timestamp DEFAULT (now()),
 	CONSTRAINT `score_id` PRIMARY KEY(`id`)

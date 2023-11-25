@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "678f4c9d-a4c4-4e3f-9485-e2588c875e68",
+  "id": "2b8daa03-7e55-414d-8ee1-0cecee9f55c8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -289,9 +289,9 @@
         },
         "participationId": {
           "name": "participationId",
-          "type": "varchar(255)",
+          "type": "int",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "roundId": {

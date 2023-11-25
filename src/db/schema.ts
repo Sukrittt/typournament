@@ -115,7 +115,7 @@ export const score = mysqlTable("score", {
 
   point: int("score").notNull(),
   average: float("average").notNull(),
-  participationId: varchar("participationId", { length: 255 }),
+  participationId: int("participationId").notNull(),
   roundId: int("roundId").notNull(),
 
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
