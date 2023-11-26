@@ -45,9 +45,9 @@ export const Tournament = async ({
               <p className="mx-4">Position</p>
               <p className="text-left mx-4 col-span-2">Name</p>
               <p className="mx-4">Played</p>
-              <p className="mx-4">Wins</p>
-              <p className="mx-4">Draws</p>
-              <p className="mx-4">Losses</p>
+              <p className="mx-4">Won</p>
+              <p className="mx-4">Drawn</p>
+              <p className="mx-4">Lost</p>
               <p className="mx-4">Avg</p>
               <p className="mx-4">Points</p>
               <p className="col-span-4">Form</p>
@@ -58,6 +58,7 @@ export const Tournament = async ({
             {league.participants.map((participant, index) => (
               <Fragment key={participant.participation.id}>
                 <ParticipantRow
+                  position={index + 1}
                   participant={participant}
                   rounds={league.rounds}
                 />
@@ -79,9 +80,14 @@ export const Tournament = async ({
 
 interface ParticipantRowProps {
   participant: ExtendedParticipantType;
+  position: number;
   rounds: Round[];
 }
-const ParticipantRow = ({ participant, rounds }: ParticipantRowProps) => {
+const ParticipantRow = ({
+  participant,
+  rounds,
+  position,
+}: ParticipantRowProps) => {
   const { totalPoints, totalWins, totalLoss, totalDraw, totalAvg, recentForm } =
     useParticipantScores({
       participant,
@@ -93,7 +99,7 @@ const ParticipantRow = ({ participant, rounds }: ParticipantRowProps) => {
 
   return (
     <div className="grid grid-cols-13 py-2 text-neutral-200 items-center">
-      <p>1</p>
+      <p>{position}</p>
       <div className="flex gap-x-2 items-center col-span-2">
         <UserAvatar user={participant.user} className="h-5 w-5" />
         <p className="font-medium text-lg">{participantName}</p>

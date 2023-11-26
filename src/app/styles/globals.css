@@ -76,14 +76,14 @@
 }
 
 
-main {
+body {
   width: 100vw;
   min-height: 100vh;
   position: relative;
   display: flex;
   justify-content: center;
 }
-main:before {
+body:before {
   position: absolute;
   content: '';
   z-index: 2;
@@ -91,7 +91,7 @@ main:before {
   height: 100%;
   top: 0;
 }
-main:after {
+body:after {
   content: '';
   background-image: url('/grid.svg');
   z-index: -1;
@@ -103,7 +103,7 @@ main:after {
   filter: invert(1);
 }
 @media (prefers-color-scheme: dark) {
-  main:after {
+  body:after {
     filter: unset;
  }
 }

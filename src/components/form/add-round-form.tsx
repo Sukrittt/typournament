@@ -40,7 +40,7 @@ export const AddRoundForm = ({
     },
     "add-round-results": {
       onNextStep: () => setStep("announce-winner"),
-      onBackStep: () => setStep("add-round-results"),
+      onBackStep: () => setStep("select-participants"),
     },
     "announce-winner": {
       onBackStep: () => setStep("add-round-results"),
@@ -72,6 +72,8 @@ export const AddRoundForm = ({
           tournamentId={participants[0].participation.tournamentId}
           participantOne={participantOne}
           participantTwo={participantTwo}
+          setParticipantOne={setParticipantOne}
+          setParticipantTwo={setParticipantTwo}
           roundFlow={roundFlow[step]}
           setWinner={setWinner}
           setWinnerAvg={setWinnerAvg}
@@ -89,6 +91,7 @@ export const AddRoundForm = ({
           winnerAvg={winnerAvg}
           loserAvg={loserAvg}
           newRecord={newRecord}
+          tournamentId={participants[0].participation.tournamentId}
         />
       )}
     </div>

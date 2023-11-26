@@ -56,13 +56,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={GeistSans.className}>
-        <main>
-          <div className="content">
-            <Providers>
-              <Toaster />
-              {children}
-            </Providers>
-          </div>
+        <main className="content">
+          <Providers>
+            <Toaster />
+            {children}
+          </Providers>
         </main>
       </body>
     </html>

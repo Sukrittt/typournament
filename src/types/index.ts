@@ -25,3 +25,9 @@ export type RoundFlow = {
   onBackStep?: () => void;
   onNextStep?: () => void;
 };
+
+export interface AnnouncementRoundFlow extends RoundFlow {
+  title: string;
+  winner?: User | null;
+  loser?: User | null;
+}

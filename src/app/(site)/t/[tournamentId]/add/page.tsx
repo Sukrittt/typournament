@@ -14,7 +14,7 @@ export default function Create({ params }: CreatePageProps) {
 
   return (
     <div className="w-full max-w-sm space-y-2">
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<p>Loading...</p>}>
         <AddRound tournamentId={tournamentId} />
       </Suspense>
     </div>

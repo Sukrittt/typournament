@@ -1,19 +1,23 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
+import { Loader } from "lucide-react";
 
 import { User } from "~/db/schema";
 import { RoundFlow } from "~/types";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { getCustomizedUserName, isValidFloat } from "~/lib/utils";
 import { trpc } from "~/trpc/client";
-import { RoundSchema } from "~/lib/validators";
 import { RoundScenario } from "~/config";
-import { Loader } from "lucide-react";
+import { Input } from "~/components/ui/input";
+import { RoundSchema } from "~/lib/validators";
+import { Button } from "~/components/ui/button";
+import { RoundComponentVariants } from "~/config/motion";
+import { getCustomizedUserName, isValidFloat } from "~/lib/utils";
 
 interface AddResulsProps {
   participantOne: User | null;
   participantTwo: User | null;
+  setParticipantOne: (user: User | null) => void;
+  setParticipantTwo: (user: User | null) => void;
   setWinner: (user: User) => void;
   setLoser: (user: User) => void;
   participantOnePId: number | undefined;
@@ -28,6 +32,8 @@ interface AddResulsProps {
 export const AddResults: FC<AddResulsProps> = ({
   participantOne,
   participantTwo,
+  setParticipantOne,
+  setParticipantTwo,
   setWinner,
   setLoser,
   participantOnePId,
@@ -209,80 +215,112 @@ export const AddResults: FC<AddResulsProps> = ({
     },
   });
 
+  const handleGoBack = () => {
+    setParticipantOne(null);
+    setParticipantTwo(null);
+    roundFlow.onBackStep?.();
+  };
+
   return (
-    <div className="flex flex-col gap-y-8">
-      <div className="flex items-center justify-center gap-x-8">
-        <div className="space-y-4">
-          <h1 className="font-bold text-2xl text-center text-neutral-200">
-            {getCustomizedUserName({ username: participantOne.name })}
-          </h1>
+    <AnimatePresence mode="wait">
+      <motion.div
+        className="flex flex-col gap-y-8"
+        variants={RoundComponentVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        <div className="flex items-center justify-center gap-x-8">
+          <div className="space-y-4">
+            <h1 className="font-bold text-2xl text-center text-neutral-200">
+              {getCustomizedUserName({ username: participantOne.name })}
+            </h1>
 
-          <div className="flex flex-col gap-y-8">
-            <Input
-              placeholder="Round 1"
-              disabled={isLoading}
-              value={participantOneRounds[0]}
-              onChange={(e) =>
-                handleParticipantOneRoundChange(0, e.target.value)
-              }
-            />
-            <Input
-              placeholder="Round 2"
-              disabled={isLoading}
-              value={participantOneRounds[1]}
-              onChange={(e) =>
-                handleParticipantOneRoundChange(1, e.target.value)
-              }
-            />
-            <Input
-              placeholder="Round 3"
-              disabled={isLoading}
-              value={participantOneRounds[2]}
-              onChange={(e) =>
-                handleParticipantOneRoundChange(2, e.target.value)
-              }
-            />
+            <div className="flex flex-col gap-y-8">
+              <Input
+                placeholder="Round 1"
+                disabled={isLoading}
+                value={participantOneRounds[0] ?? ""}
+                onChange={(e) =>
+                  handleParticipantOneRoundChange(0, e.target.value)
+                }
+              />
+              <Input
+                placeholder="Round 2"
+                disabled={isLoading}
+                value={participantOneRounds[1] ?? ""}
+                onChange={(e) =>
+                  handleParticipantOneRoundChange(1, e.target.value)
+                }
+              />
+              <Input
+                placeholder="Round 3"
+                disabled={isLoading}
+                value={participantOneRounds[2] ?? ""}
+                onChange={(e) =>
+                  handleParticipantOneRoundChange(2, e.target.value)
+                }
+              />
+            </div>
+          </div>
+          <span className="text-muted-foreground text-2xl mt-12 font-extrabold">
+            VS
+          </span>
+          <div className="space-y-4">
+            <h1 className="font-bold text-2xl text-center text-neutral-200">
+              {getCustomizedUserName({ username: participantTwo.name })}
+            </h1>
+
+            <div className="flex flex-col gap-y-8">
+              <Input
+                placeholder="Round 1"
+                disabled={isLoading}
+                value={participantTwoRounds[0] ?? ""}
+                onChange={(e) =>
+                  handleParticipantTwoRoundChange(0, e.target.value)
+                }
+              />
+              <Input
+                placeholder="Round 2"
+                disabled={isLoading}
+                value={participantTwoRounds[1] ?? ""}
+                onChange={(e) =>
+                  handleParticipantTwoRoundChange(1, e.target.value)
+                }
+              />
+              <Input
+                placeholder="Round 3"
+                disabled={isLoading}
+                value={participantTwoRounds[2] ?? ""}
+                onChange={(e) =>
+                  handleParticipantTwoRoundChange(2, e.target.value)
+                }
+              />
+            </div>
           </div>
         </div>
-        <span className="text-muted-foreground text-2xl mt-12 font-extrabold">
-          VS
-        </span>
-        <div className="space-y-4">
-          <h1 className="font-bold text-2xl text-center text-neutral-200">
-            {getCustomizedUserName({ username: participantTwo.name })}
-          </h1>
-
-          <div className="flex flex-col gap-y-8">
-            <Input
-              placeholder="Round 1"
-              disabled={isLoading}
-              value={participantTwoRounds[0]}
-              onChange={(e) =>
-                handleParticipantTwoRoundChange(0, e.target.value)
-              }
-            />
-            <Input
-              placeholder="Round 2"
-              disabled={isLoading}
-              value={participantTwoRounds[1]}
-              onChange={(e) =>
-                handleParticipantTwoRoundChange(1, e.target.value)
-              }
-            />
-            <Input
-              placeholder="Round 3"
-              disabled={isLoading}
-              value={participantTwoRounds[2]}
-              onChange={(e) =>
-                handleParticipantTwoRoundChange(2, e.target.value)
-              }
-            />
-          </div>
+        <div className="flex gap-x-2 w-full">
+          <Button
+            onClick={handleGoBack}
+            disabled={isLoading}
+            className="w-full"
+            variant="outline"
+          >
+            Go Back
+          </Button>
+          <Button
+            onClick={handleAddResults}
+            disabled={isLoading}
+            className="w-full"
+          >
+            {isLoading ? (
+              <Loader className="h-4 w-4 animate-spin" />
+            ) : (
+              "Kick Off"
+            )}
+          </Button>
         </div>
-      </div>
-      <Button onClick={handleAddResults} disabled={isLoading}>
-        {isLoading ? <Loader className="h-4 w-4 animate-spin" /> : "Kick Off"}
-      </Button>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };

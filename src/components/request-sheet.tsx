@@ -17,7 +17,7 @@ export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
     <Sheet>
       <SheetTrigger asChild>
         <span className="cursor-pointer text-sm text-muted-foreground hover:underline underline-offset-4">
-          Tournament Requests
+          Tournament Requests ({data.requests.length})
         </span>
       </SheetTrigger>
       <SheetContent className="min-w-[600px]">

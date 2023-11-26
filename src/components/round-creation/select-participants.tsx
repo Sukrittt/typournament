@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { FC, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -9,6 +10,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { User } from "~/db/schema";
+import { RoundComponentVariants } from "~/config/motion";
 import { ExtendedParticipantType, RoundFlow } from "~/types";
 
 type Participant = Omit<ExtendedParticipantType, "scores">;
@@ -61,44 +63,54 @@ export const SelectParticipants: FC<SelectParticipantsProps> = ({
   }, [participantOne, participantTwo, roundFlow]);
 
   return (
-    <div className="flex flex-col gap-y-12 items-center">
-      <div className="flex gap-x-8">
-        <Select onValueChange={(value) => handleSetUser(value, "one")}>
-          <SelectTrigger className="w-[280px]">
-            <SelectValue placeholder="Select participant" />
-          </SelectTrigger>
-          <SelectContent>
-            {participantOneLists.map((participant) => (
-              <SelectItem
-                key={participant.participation.id}
-                value={participant.user.email}
-                className="cursor-pointer"
-              >
-                {participant.user.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <span className="text-muted-foreground text-2xl pt-1.5 font-extrabold">
-          VS
-        </span>
-        <Select onValueChange={(value) => handleSetUser(value, "two")}>
-          <SelectTrigger className="w-[280px]">
-            <SelectValue placeholder="Select participant" />
-          </SelectTrigger>
-          <SelectContent>
-            {participantTwoLists.map((participant) => (
-              <SelectItem
-                key={participant.participation.id}
-                value={participant.user.email}
-                className="cursor-pointer"
-              >
-                {participant.user.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        className="flex flex-col gap-y-8"
+        variants={RoundComponentVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        <div className="flex flex-col gap-y-12 items-center">
+          <div className="flex gap-x-8">
+            <Select onValueChange={(value) => handleSetUser(value, "one")}>
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Select participant" />
+              </SelectTrigger>
+              <SelectContent>
+                {participantOneLists.map((participant) => (
+                  <SelectItem
+                    key={participant.participation.id}
+                    value={participant.user.email}
+                    className="cursor-pointer"
+                  >
+                    {participant.user.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <span className="text-muted-foreground text-2xl pt-1.5 font-extrabold">
+              VS
+            </span>
+            <Select onValueChange={(value) => handleSetUser(value, "two")}>
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Select participant" />
+              </SelectTrigger>
+              <SelectContent>
+                {participantTwoLists.map((participant) => (
+                  <SelectItem
+                    key={participant.participation.id}
+                    value={participant.user.email}
+                    className="cursor-pointer"
+                  >
+                    {participant.user.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
