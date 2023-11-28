@@ -4,16 +4,16 @@ import { LucideProps } from "lucide-react";
 import { serverClient } from "~/trpc/server-client";
 
 import Link from "next/link";
-import { Round } from "~/db/schema";
 import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
-import { ExtendedParticipantType } from "~/types";
 import { getCustomizedUserName } from "~/lib/utils";
-import { FormCircle } from "~/components/form-circle";
+import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
+import { ExtendedParticipantType, ExtendedRound } from "~/types";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { useSortedParticipants } from "~/hooks/useSortedParticipants";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +27,10 @@ export const Tournament = async ({
   if (!session) redirect("/sign-in");
 
   const league = await serverClient.tournament.getLeague({ tournamentId });
+  const { sortedParticipants } = useSortedParticipants({
+    participants: league.participants,
+    rounds: league.rounds,
+  });
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32">
@@ -55,12 +59,15 @@ export const Tournament = async ({
           </CardHeader>
           <Separator />
           <CardContent className="py-3 px-0 flex flex-col gap-y-2">
-            {league.participants.map((participant, index) => (
+            {sortedParticipants.map((participant, index) => (
               <Fragment key={participant.participation.id}>
                 <ParticipantRow
                   position={index + 1}
+                  totalAvg={participant.totalAvg}
+                  totalPoints={participant.totalPoints}
                   participant={participant}
                   rounds={league.rounds}
+                  participants={sortedParticipants}
                 />
                 {index < league.participants.length - 1 && <Separator />}
               </Fragment>
@@ -81,18 +88,23 @@ export const Tournament = async ({
 interface ParticipantRowProps {
   participant: ExtendedParticipantType;
   position: number;
-  rounds: Round[];
+  rounds: ExtendedRound[];
+  totalPoints: number;
+  totalAvg: number;
+  participants: ExtendedParticipantType[];
 }
 const ParticipantRow = ({
   participant,
   rounds,
   position,
+  totalAvg,
+  totalPoints,
+  participants,
 }: ParticipantRowProps) => {
-  const { totalPoints, totalWins, totalLoss, totalDraw, totalAvg, recentForm } =
-    useParticipantScores({
-      participant,
-      rounds,
-    });
+  const { totalWins, totalLoss, totalDraw, recentForm } = useParticipantScores({
+    participant,
+    rounds,
+  });
   const participantName = getCustomizedUserName({
     username: participant.user.name,
   }); //use short for sm device
@@ -111,8 +123,12 @@ const ParticipantRow = ({
       <p className="text-sm">{totalAvg.toFixed(2)}</p>
       <p className="text-sm">{totalPoints}</p>
       <div className="flex justify-around items-center col-span-4">
-        {recentForm.map((form, index) => (
-          <FormCircle key={index} form={form} />
+        {recentForm.map((roundResult) => (
+          <RecentForm
+            key={roundResult.round.id}
+            round={roundResult}
+            participants={participants}
+          />
         ))}
       </div>
     </div>

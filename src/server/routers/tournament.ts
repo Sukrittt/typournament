@@ -8,6 +8,7 @@ import { participationRouter } from "~/server/routers/participant";
 import {
   Participation,
   Round,
+  Score,
   Tournament,
   User,
   participation,
@@ -17,6 +18,7 @@ import {
   tournament,
   users,
 } from "~/db/schema";
+import { ExtendedRound } from "~/types";
 
 export const tournamentRouter = createTRPCRouter({
   getUserParticipations: privateProcedure.query(async ({ ctx }) => {
@@ -54,7 +56,7 @@ export const tournamentRouter = createTRPCRouter({
         Promise<Tournament[]>,
         Promise<number>,
         Promise<{ user: User; participation: Participation }[]>,
-        Promise<Round[]>
+        Promise<{ score: Score; round: Round }[]>
       ] = [
         db
           .select()
@@ -71,10 +73,12 @@ export const tournamentRouter = createTRPCRouter({
         db
           .select()
           .from(round)
-          .where(eq(round.tournamentId, input.tournamentId)),
+          .where(eq(round.tournamentId, input.tournamentId))
+          .innerJoin(score, eq(round.id, score.roundId))
+          .orderBy(desc(round.createdAt)),
       ];
 
-      const [selectedTournaments, participantCount, participants, rounds] =
+      const [selectedTournaments, participantCount, participants, rawRounds] =
         await Promise.all(promises);
 
       const tournamentInfo = selectedTournaments[0];
@@ -92,6 +96,8 @@ export const tournamentRouter = createTRPCRouter({
           };
         })
       );
+
+      const rounds = getFormattedRounds(rawRounds);
 
       const tournamentObj = {
         tournamentInfo,
@@ -169,4 +175,24 @@ const sendRequest = async (
   } catch (error) {
     console.log("Something went wrong with sending request.", error);
   }
+};
+
+const getFormattedRounds = (rounds: { score: Score; round: Round }[]) => {
+  const formattedRounds: ExtendedRound[] = [];
+
+  rounds.forEach(({ round }) => {
+    const alreadyPushedRound = !!formattedRounds.find(
+      (r) => r.round.id === round.id
+    );
+
+    if (alreadyPushedRound) return;
+
+    const roundScores = rounds
+      .filter((r) => r.score.roundId === round.id)
+      .map((r) => r.score);
+
+    formattedRounds.push({ round, score: roundScores });
+  });
+
+  return formattedRounds;
 };

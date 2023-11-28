@@ -1,7 +1,8 @@
 import { FC, useCallback, useState } from "react";
 import { toast } from "sonner";
-import { AnimatePresence, motion } from "framer-motion";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { User } from "~/db/schema";
 import { RoundFlow } from "~/types";
@@ -44,6 +45,8 @@ export const AddResults: FC<AddResulsProps> = ({
   roundFlow,
   setNewRecord,
 }) => {
+  const router = useRouter();
+
   const [participantOneRounds, setParticipantOneRounds] = useState<string[]>(
     []
   );
@@ -204,6 +207,8 @@ export const AddResults: FC<AddResulsProps> = ({
 
   const { mutate: addRound, isLoading } = trpc.round.addRound.useMutation({
     onSuccess: (response) => {
+      router.refresh();
+
       if (response && response.newRecord) {
         setNewRecord(true);
       }

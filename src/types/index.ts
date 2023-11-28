@@ -1,4 +1,11 @@
-import { Participation, Request, Score, Tournament, User } from "~/db/schema";
+import {
+  Participation,
+  Request,
+  Score,
+  Tournament,
+  User,
+  Round,
+} from "~/db/schema";
 
 export type League = {
   user: User;
@@ -31,3 +38,10 @@ export interface AnnouncementRoundFlow extends RoundFlow {
   winner?: User | null;
   loser?: User | null;
 }
+
+export type ExtendedRound = {
+  round: Round;
+  score: Score[];
+};
+
+export type RoundStatus = "win" | "loss" | "draw" | "nan";
