@@ -42,9 +42,6 @@ export const AddParticipantsForm = ({
         router.refresh();
         router.push(`/t/${tournamentId}/requests`);
       },
-      onError: () => {
-        toast.error("Something went wrong.");
-      },
     });
 
   const isValidEmail = (emailId: string) => {

@@ -30,9 +30,6 @@ export const PendingRequestCard = ({
         router.refresh();
         toast.success("Request deleted successfully");
       },
-      onError: () => {
-        toast.error("Something went wrong");
-      },
     });
 
   return (

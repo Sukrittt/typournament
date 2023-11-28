@@ -44,9 +44,6 @@ export const CreateTournament = () => {
         form.reset();
         router.push(`/t/${tournamentId}`);
       },
-      onError: () => {
-        toast.error("Something went wrong.");
-      },
     });
 
   const isValidEmail = (emailId: string) => {

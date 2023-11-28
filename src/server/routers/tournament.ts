@@ -124,7 +124,7 @@ export const tournamentRouter = createTRPCRouter({
       const tournamentId = parseInt(createdTournament.insertId);
 
       const caller = requestRouter.createCaller(ctx);
-      caller.createRequests({ tournamentId, emailIds: input.emailIds });
+      await caller.createRequests({ tournamentId, emailIds: input.emailIds });
 
       await db.insert(participation).values({
         tournamentId,
@@ -192,7 +192,7 @@ export const tournamentRouter = createTRPCRouter({
       if (!existingTournament) {
         return new TRPCError({
           code: "NOT_FOUND",
-          message: "Tournament not found",
+          message: "This tournament not found.",
         });
       }
 

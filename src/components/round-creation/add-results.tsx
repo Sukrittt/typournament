@@ -215,9 +215,6 @@ export const AddResults: FC<AddResulsProps> = ({
 
       roundFlow.onNextStep?.();
     },
-    onError: () => {
-      toast.error("Something went wrong.");
-    },
   });
 
   const handleGoBack = () => {

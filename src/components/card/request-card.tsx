@@ -38,9 +38,6 @@ export const RequestCard = ({
       onSuccess: (_, params) => {
         handleOnSuccess(params.status);
       },
-      onError: () => {
-        toast.error("Something went wrong");
-      },
       onMutate: (params) => {
         setRequestInProcess(params.status);
       },
@@ -48,10 +45,10 @@ export const RequestCard = ({
 
   const handleOnSuccess = (status: "accept" | "reject") => {
     if (status === "accept") {
-      toast.success("Request accepted");
+      toast.success("Request accepted.");
       router.push(`/t/${tournament.id}`);
     } else {
-      toast.success("Request declined");
+      toast.success("Request declined.");
       router.refresh();
     }
   };

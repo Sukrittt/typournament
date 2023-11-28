@@ -7,6 +7,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { trpc } from "~/trpc/client";
 import superjson from "superjson";
+import { toast } from "sonner";
+
+interface IError {
+  code: string;
+  message: string;
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -16,6 +22,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
           queries: {
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
+          },
+          mutations: {
+            onError: (error) => {
+              const { message } = error as IError;
+
+              toast.error(message);
+            },
           },
         },
       })

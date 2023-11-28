@@ -48,9 +48,6 @@ export const ManageTournamentForm = ({
         form.reset();
         router.push(`/t/${tournament.id}`);
       },
-      onError: () => {
-        toast.error("Something went wrong.");
-      },
     });
 
   function onSubmit(content: UpdateTournamentValidator) {
@@ -67,7 +64,7 @@ export const ManageTournamentForm = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Link
-            href="/dashboard"
+            href={`/t/${tournament.id}`}
             className={cn(
               buttonVariants({ variant: "link" }),
               "text-white w-fit pl-0"

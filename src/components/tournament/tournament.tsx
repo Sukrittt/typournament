@@ -11,6 +11,7 @@ import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
 import { cn, getCustomizedUserName } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
 import { ExtendedParticipantType, ExtendedRound } from "~/types";
 import { CreatorSheet } from "~/components/creator/creator-sheet";
@@ -46,7 +47,7 @@ export const Tournament = async ({
   };
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32">
+    <section className="w-full pt-12 md:pt-24 lg:pt-32">
       <Link
         href="/dashboard"
         className={cn(
@@ -84,26 +85,28 @@ export const Tournament = async ({
             </div>
           </CardHeader>
           <Separator />
-          <CardContent className="py-3 px-0 flex flex-col gap-y-2">
-            {sortedParticipants.map((participant, index) => {
-              const highestWPM = getHighestWPM(participant);
+          <ScrollArea className="max-h-72 w-full rounded-md">
+            <CardContent className="py-3 px-0 flex flex-col gap-y-2">
+              {sortedParticipants.map((participant, index) => {
+                const highestWPM = getHighestWPM(participant);
 
-              return (
-                <Fragment key={participant.participation.id}>
-                  <ParticipantRow
-                    position={index + 1}
-                    totalAvg={participant.totalAvg}
-                    totalPoints={participant.totalPoints}
-                    participant={participant}
-                    rounds={league.rounds}
-                    participants={sortedParticipants}
-                    highestWPM={highestWPM}
-                  />
-                  {index < league.participants.length - 1 && <Separator />}
-                </Fragment>
-              );
-            })}
-          </CardContent>
+                return (
+                  <Fragment key={participant.participation.id}>
+                    <ParticipantRow
+                      position={index + 1}
+                      totalAvg={participant.totalAvg}
+                      totalPoints={participant.totalPoints}
+                      participant={participant}
+                      rounds={league.rounds}
+                      participants={sortedParticipants}
+                      highestWPM={highestWPM}
+                    />
+                    {index < league.participants.length - 1 && <Separator />}
+                  </Fragment>
+                );
+              })}
+            </CardContent>
+          </ScrollArea>
         </Card>
       </div>
       <div className="flex items-center justify-center gap-x-2 mt-8">

@@ -3,9 +3,9 @@ import { TRPCError } from "@trpc/server";
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "~/db";
-import { participation, request, tournament, users } from "~/db/schema";
-import { createTRPCRouter, privateProcedure } from "~/server/trpc";
 import { addParticipantsSchema } from "~/lib/validators";
+import { createTRPCRouter, privateProcedure } from "~/server/trpc";
+import { participation, request, tournament, users } from "~/db/schema";
 
 export const requestRouter = createTRPCRouter({
   getUserRequests: privateProcedure.query(async ({ ctx }) => {
@@ -76,21 +76,21 @@ export const requestRouter = createTRPCRouter({
       if (!existingRequest) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Request not found",
+          message: "This Request not found.",
         });
       }
 
       if (existingRequest.status !== "pending") {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Request was already dealt with",
+          message: "You have already responded to this request.",
         });
       }
 
       if (existingRequest.receiverId !== ctx.userId) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "You are not the receiver of this request",
+          message: "You are not the receiver of this request.",
         });
       }
 
@@ -134,6 +134,23 @@ export const requestRouter = createTRPCRouter({
 
       await Promise.all(
         requestedUserIds.map(async (userId) => {
+          const existingParticipant = await db
+            .select()
+            .from(participation)
+            .where(
+              and(
+                eq(participation.userId, userId),
+                eq(participation.tournamentId, input.tournamentId)
+              )
+            );
+
+          if (existingParticipant.length > 0) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "User is already a participant.",
+            });
+          }
+
           const existingRequest = await db
             .select()
             .from(request)
@@ -141,14 +158,15 @@ export const requestRouter = createTRPCRouter({
               and(
                 eq(request.senderId, ctx.userId),
                 eq(request.receiverId, userId),
-                eq(request.tournamentId, input.tournamentId)
+                eq(request.tournamentId, input.tournamentId),
+                eq(request.status, "pending")
               )
             );
 
           if (existingRequest.length > 0) {
             throw new TRPCError({
               code: "BAD_REQUEST",
-              message: "Request already exists",
+              message: "This user has already been sent a request.",
             });
           }
 
@@ -169,21 +187,21 @@ export const requestRouter = createTRPCRouter({
       if (!existingRequest) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Request not found",
+          message: "This request was not found.",
         });
       }
 
       if (existingRequest.status !== "pending") {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Request was already accepted by the user.",
+          message: "This request is already accepted by the user.",
         });
       }
 
       if (existingRequest.senderId !== ctx.userId) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "You are not the sender of this request",
+          message: "You are not the sender of this request.",
         });
       }
 

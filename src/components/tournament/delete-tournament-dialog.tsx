@@ -28,9 +28,6 @@ export function DeleteTournamentDialog({
         toast.success("Tournament deleted successfully.");
         router.push(`/dashboard`);
       },
-      onError: () => {
-        toast.error("Something went wrong.");
-      },
     });
 
   return (
