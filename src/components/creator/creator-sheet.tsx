@@ -34,7 +34,7 @@ export const CreatorSheet = ({ tournamentId }: { tournamentId: number }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="absolute top-8 right-2">
+        <Button variant="ghost" className="absolute top-8 right-4">
           <LockKeyhole className="h-4 w-4 mr-2" />
           <span className="pt-1">Creator Panel</span>
         </Button>

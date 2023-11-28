@@ -1,10 +1,14 @@
 import { z } from "zod";
-import { desc, eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
+import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "~/db";
-import { createTournamentSchema } from "~/lib/validators";
 import { createTRPCRouter, privateProcedure } from "~/server/trpc";
 import { participationRouter } from "~/server/routers/participant";
+import {
+  createTournamentSchema,
+  updateTournamentSchema,
+} from "~/lib/validators";
 import {
   Participation,
   Round,
@@ -19,7 +23,7 @@ import {
   users,
 } from "~/db/schema";
 import { ExtendedRound } from "~/types";
-import { requestRouter } from "./request";
+import { requestRouter } from "~/server/routers/request";
 
 export const tournamentRouter = createTRPCRouter({
   getUserParticipations: privateProcedure.query(async ({ ctx }) => {
@@ -128,6 +132,85 @@ export const tournamentRouter = createTRPCRouter({
       });
 
       return { tournamentId };
+    }),
+  updateTournament: privateProcedure
+    .input(updateTournamentSchema)
+    .mutation(async ({ ctx, input }) => {
+      const existingTournaments = await db
+        .select()
+        .from(tournament)
+        .where(
+          and(
+            eq(tournament.id, input.tournamentId),
+            eq(tournament.creatorId, ctx.userId)
+          )
+        );
+
+      const existingTournament = existingTournaments[0];
+
+      if (!existingTournament) {
+        return new TRPCError({
+          code: "NOT_FOUND",
+          message: "Tournament not found",
+        });
+      }
+
+      if (existingTournament.creatorId !== ctx.userId) {
+        return new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to update this tournament.",
+        });
+      }
+
+      await db
+        .update(tournament)
+        .set({
+          name: input.name,
+        })
+        .where(
+          and(
+            eq(tournament.id, input.tournamentId),
+            eq(tournament.creatorId, ctx.userId)
+          )
+        );
+    }),
+  deleteTournament: privateProcedure
+    .input(z.object({ tournamentId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const existingTournaments = await db
+        .select()
+        .from(tournament)
+        .where(
+          and(
+            eq(tournament.id, input.tournamentId),
+            eq(tournament.creatorId, ctx.userId)
+          )
+        );
+
+      const existingTournament = existingTournaments[0];
+
+      if (!existingTournament) {
+        return new TRPCError({
+          code: "NOT_FOUND",
+          message: "Tournament not found",
+        });
+      }
+
+      if (existingTournament.creatorId !== ctx.userId) {
+        return new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to delete this tournament.",
+        });
+      }
+
+      await db
+        .delete(tournament)
+        .where(
+          and(
+            eq(tournament.id, input.tournamentId),
+            eq(tournament.creatorId, ctx.userId)
+          )
+        );
     }),
 });
 

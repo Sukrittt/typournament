@@ -5,6 +5,7 @@ import { getAuthSession } from "~/lib/auth";
 import { serverClient } from "~/trpc/server-client";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { PendingRequestCard } from "~/components/card/pending-request-card";
 
 export const CreatorRequests = async ({
@@ -64,26 +65,36 @@ export const CreatorRequests = async ({
   }
 
   return (
-    <section className="py-12 container flex flex-col gap-y-4">
-      <div className="space-y-2">
+    <section className="pt-24 container flex flex-col gap-y-4">
+      <div>
         <h1 className="text-2xl font-bold">Pending Requests</h1>
-        <p className="text-muted-foreground">
-          Below are all the requests from participants yet to join the
-          tournament.
-        </p>
+        <div className="flex justify-between items-center">
+          <p className="text-muted-foreground">
+            Below are all the requests from participants yet to join the
+            tournament.
+          </p>
+          <Link
+            href={`/t/${tournamentId}/requests/add`}
+            className={buttonVariants({ variant: "link" })}
+          >
+            Add Participants
+          </Link>
+        </div>
       </div>
 
       <Separator className="my-4" />
 
-      <div className="space-y-4">
-        {requests.map(({ receiver, request }) => (
-          <PendingRequestCard
-            key={request.id}
-            user={receiver}
-            request={request}
-          />
-        ))}
-      </div>
+      <ScrollArea className="h-[28rem] px-6 w-full rounded-md">
+        <div className="space-y-4">
+          {requests.map(({ receiver, request }) => (
+            <PendingRequestCard
+              key={request.id}
+              user={receiver}
+              request={request}
+            />
+          ))}
+        </div>
+      </ScrollArea>
     </section>
   );
 };

@@ -38,8 +38,9 @@ export const Tournament = async ({
   const getHighestWPM = (participant: ExtendedParticipantType) => {
     if (!league.tournamentInfo.highestWPMUserId) return null;
 
-    if (league.tournamentInfo.highestWPMUserId !== participant.user.id)
+    if (league.tournamentInfo.highestWPMUserId !== participant.user.id) {
       return null;
+    }
 
     return league.tournamentInfo.highestWPM;
   };

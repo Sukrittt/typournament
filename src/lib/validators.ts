@@ -4,6 +4,14 @@ export const createTournamentSchema = z.object({
   name: z.string().min(3).max(255),
   emailIds: z.string().email().array().min(1).max(10),
 });
+export const updateTournamentSchema = createTournamentSchema
+  .omit({
+    emailIds: true,
+  })
+  .extend({
+    tournamentId: z.number(),
+  });
+export type UpdateTournamentValidator = z.infer<typeof updateTournamentSchema>;
 
 export const addParticipantsSchema = createTournamentSchema
   .omit({

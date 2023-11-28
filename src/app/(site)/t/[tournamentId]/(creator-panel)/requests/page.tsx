@@ -13,6 +13,8 @@ interface TournamentRequestsPageProps {
   };
 }
 
+export const dynamic = "force-dynamic";
+
 const TournamentRequests = (params: TournamentRequestsPageProps) => {
   const { tournamentId: rawTournamentId } = params.params;
   const tournamentId = parseInt(rawTournamentId);

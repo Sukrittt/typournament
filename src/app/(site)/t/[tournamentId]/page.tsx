@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { LoadingScreen } from "~/components/loading-screen";
 
-import { Tournament } from "~/components/tournament";
+import { Tournament } from "~/components/tournament/tournament";
 
 interface TournamentPageProps {
   params: {
