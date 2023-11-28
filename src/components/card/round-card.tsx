@@ -1,8 +1,9 @@
 import UserAvatar from "~/components/avatar";
 import { useRoundDetails } from "~/hooks/useRoundDetails";
+import { CustomToolTip } from "~/components/ui/custom-tooltip";
 import { ExtendedParticipantType, ExtendedRound } from "~/types";
 import { getCustomizedUserName, getFormattedDate } from "~/lib/utils";
-import { CustomToolTip } from "../ui/custom-tooltip";
+import { Info } from "lucide-react";
 
 interface PreviousRoundResultProps {
   round: ExtendedRound;
@@ -23,15 +24,26 @@ export const RoundCard: React.FC<PreviousRoundResultProps> = ({
 
   if (!participantOne || !participantTwo) {
     return (
-      <p className="text-muted-foreground text-xs text-center">
-        No score was found.
-      </p>
+      <div className="text-muted-foreground flex items-center gap-x-1 justify-center">
+        <p className="text-xs text-center pt-px">
+          No score was found for this round.
+        </p>
+        <CustomToolTip
+          content={
+            <p className="text-xs text-muted-foreground">
+              The participant(s) was removed from the tournament for a moment.
+            </p>
+          }
+        >
+          <Info className="h-3 w-3" />
+        </CustomToolTip>
+      </div>
     );
   }
 
   return (
     <div className="p-2 space-y-3 w-full">
-      <div className="flex gap-x-2">
+      <div className="flex gap-x-2 justify-between">
         <div className="flex items-center gap-x-2">
           <p>
             {getCustomizedUserName({
@@ -48,7 +60,7 @@ export const RoundCard: React.FC<PreviousRoundResultProps> = ({
             </p>
           }
         >
-          <div className="h-6 flex items-center text-xs px-2 justify-center rounded-md bg-primary text-white">
+          <div className="h-6 w-24 flex items-center text-xs px-2 justify-center rounded-md bg-primary text-black">
             {participantOneScore} - {participantTwoScore}
           </div>
         </CustomToolTip>

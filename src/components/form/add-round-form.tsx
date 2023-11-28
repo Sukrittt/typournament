@@ -31,6 +31,7 @@ export const AddRoundForm = ({
 
   const [winnerAvg, setWinnerAvg] = useState(0);
   const [loserAvg, setLoserAvg] = useState(0);
+  const [drawAvg, setDrawAvg] = useState<number | null>(null);
 
   const [newRecord, setNewRecord] = useState(false);
 
@@ -82,6 +83,7 @@ export const AddRoundForm = ({
           participantOnePId={participantOnePId}
           participantTwoPId={participantTwoPId}
           setNewRecord={setNewRecord}
+          setDrawAvg={setDrawAvg}
         />
       )}
       {step === "announce-winner" && (
@@ -90,6 +92,7 @@ export const AddRoundForm = ({
           loser={loser}
           winnerAvg={winnerAvg}
           loserAvg={loserAvg}
+          drawAvg={drawAvg}
           newRecord={newRecord}
           tournamentId={participants[0].participation.tournamentId}
         />

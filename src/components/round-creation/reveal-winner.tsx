@@ -15,6 +15,7 @@ interface RevealWinnerProps {
   loser: User | null;
   winnerAvg: number;
   loserAvg: number;
+  drawAvg: number | null;
   newRecord: boolean;
   startFireWorks: "start" | "stop" | null;
   setStartFireWorks: (value: "start" | "stop" | null) => void;
@@ -25,6 +26,7 @@ export const RevealWinner: FC<RevealWinnerProps> = ({
   title,
   loser,
   loserAvg,
+  drawAvg,
   newRecord,
   winner,
   tournamentId,
@@ -51,15 +53,30 @@ export const RevealWinner: FC<RevealWinnerProps> = ({
           </motion.div>
         )}
 
-        <motion.h1
-          className="text-2xl font-extrabold"
-          variants={TextVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          {title}
-        </motion.h1>
+        {winner && loser && (
+          <motion.h1
+            className="text-2xl font-extrabold"
+            variants={TextVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            {title}
+          </motion.h1>
+        )}
+
+        {!winner && !loser && (
+          <motion.h1
+            className="text-lg font-bold"
+            variants={TextVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            {title} with {drawAvg} WPM.
+          </motion.h1>
+        )}
+
         {winner && loser && (
           <motion.p
             className="text-muted-foreground"
@@ -69,7 +86,7 @@ export const RevealWinner: FC<RevealWinnerProps> = ({
             exit="exit"
           >
             {winner.name} with ({winnerAvg} WPM) beats {loser.name} with (
-            {loserAvg} WPM)
+            {loserAvg} WPM).
           </motion.p>
         )}
         <Link

@@ -15,6 +15,7 @@ interface AnnounceWinnerProps {
   loser: User | null;
   winnerAvg: number;
   loserAvg: number;
+  drawAvg: number | null;
   newRecord: boolean;
   tournamentId: number;
 }
@@ -35,6 +36,7 @@ export const AnnounceWinner: FC<AnnounceWinnerProps> = ({
   loser,
   loserAvg,
   winnerAvg,
+  drawAvg,
   newRecord,
   tournamentId,
 }) => {
@@ -46,7 +48,7 @@ export const AnnounceWinner: FC<AnnounceWinnerProps> = ({
 
   const getDeclarationTitle = () => {
     if (!winner || !loser) {
-      return "Tie between the two participants.";
+      return "Tie between the two participants";
     }
 
     return `Congratulations ${getCustomizedUserName({
@@ -99,7 +101,7 @@ export const AnnounceWinner: FC<AnnounceWinnerProps> = ({
       clearTimeout(announcementTimerId);
       setAnnouncementStep("declare");
       setDebouncedStartFireWorks("start");
-    }, 17500);
+    }, 18000);
   };
 
   const [_, { sound }] = useSound(uefaMusic, {
@@ -171,6 +173,7 @@ export const AnnounceWinner: FC<AnnounceWinnerProps> = ({
           loser={loser}
           loserAvg={loserAvg}
           winnerAvg={winnerAvg}
+          drawAvg={drawAvg}
           newRecord={newRecord}
           startFireWorks={startFireWorks}
           setStartFireWorks={setStartFireWorks}

@@ -27,6 +27,7 @@ interface AddResulsProps {
   roundFlow: RoundFlow;
   setWinnerAvg: (avg: number) => void;
   setLoserAvg: (avg: number) => void;
+  setDrawAvg: (avg: number) => void;
   setNewRecord: (newRecord: boolean) => void;
 }
 
@@ -42,6 +43,7 @@ export const AddResults: FC<AddResulsProps> = ({
   tournamentId,
   setLoserAvg,
   setWinnerAvg,
+  setDrawAvg,
   roundFlow,
   setNewRecord,
 }) => {
@@ -141,7 +143,10 @@ export const AddResults: FC<AddResulsProps> = ({
     winnerId: string | undefined,
     averages: number[]
   ) => {
-    if (!winnerId) return;
+    if (!winnerId) {
+      setDrawAvg(averages[0]);
+      return;
+    }
 
     switch (winnerId) {
       case participantOne.id:
