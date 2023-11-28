@@ -12,6 +12,9 @@ import {
 import { User } from "~/db/schema";
 import { RoundComponentVariants } from "~/config/motion";
 import { ExtendedParticipantType, RoundFlow } from "~/types";
+import Link from "next/link";
+import { buttonVariants } from "../ui/button";
+import { cn } from "~/lib/utils";
 
 type Participant = Omit<ExtendedParticipantType, "scores">;
 
@@ -78,15 +81,32 @@ export const SelectParticipants: FC<SelectParticipantsProps> = ({
                 <SelectValue placeholder="Select participant" />
               </SelectTrigger>
               <SelectContent>
-                {participantOneLists.map((participant) => (
-                  <SelectItem
-                    key={participant.participation.id}
-                    value={participant.user.email}
-                    className="cursor-pointer"
-                  >
-                    {participant.user.name}
-                  </SelectItem>
-                ))}
+                {participantOneLists.length === 0 ? (
+                  <div className="text-sm text-center text-muted-foreground">
+                    <p>
+                      No enough participants?{" "}
+                      <Link
+                        className={cn(
+                          buttonVariants({ variant: "link" }),
+                          "text-muted-foreground p-0 text-sm"
+                        )}
+                        href={`/t/${participants[0].participation.tournamentId}/requests/add`}
+                      >
+                        Add them.
+                      </Link>
+                    </p>
+                  </div>
+                ) : (
+                  participantOneLists.map((participant) => (
+                    <SelectItem
+                      key={participant.participation.id}
+                      value={participant.user.email}
+                      className="cursor-pointer"
+                    >
+                      {participant.user.name}
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
             <span className="text-muted-foreground text-2xl pt-1.5 font-extrabold">
@@ -97,15 +117,32 @@ export const SelectParticipants: FC<SelectParticipantsProps> = ({
                 <SelectValue placeholder="Select participant" />
               </SelectTrigger>
               <SelectContent>
-                {participantTwoLists.map((participant) => (
-                  <SelectItem
-                    key={participant.participation.id}
-                    value={participant.user.email}
-                    className="cursor-pointer"
-                  >
-                    {participant.user.name}
-                  </SelectItem>
-                ))}
+                {participantTwoLists.length === 0 ? (
+                  <div className="text-sm text-center text-muted-foreground">
+                    <p>
+                      No enough participants?{" "}
+                      <Link
+                        className={cn(
+                          buttonVariants({ variant: "link" }),
+                          "text-muted-foreground p-0 text-sm"
+                        )}
+                        href={`/t/${participants[0].participation.tournamentId}/requests/add`}
+                      >
+                        Add them.
+                      </Link>
+                    </p>
+                  </div>
+                ) : (
+                  participantTwoLists.map((participant) => (
+                    <SelectItem
+                      key={participant.participation.id}
+                      value={participant.user.email}
+                      className="cursor-pointer"
+                    >
+                      {participant.user.name}
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>

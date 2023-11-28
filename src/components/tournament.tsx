@@ -1,25 +1,24 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import { redirect } from "next/navigation";
-import { Crown, LucideProps } from "lucide-react";
+import { ArrowLeft, Crown, LucideProps } from "lucide-react";
 import { serverClient } from "~/trpc/server-client";
 
 import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
 import { Badge } from "~/components/ui/badge";
-import { getCustomizedUserName } from "~/lib/utils";
 import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
 import { UserCard } from "~/components/card/user-card";
+import { cn, getCustomizedUserName } from "~/lib/utils";
+import { buttonVariants } from "~/components/ui/button";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
-import { Button, buttonVariants } from "~/components/ui/button";
 import { ExtendedParticipantType, ExtendedRound } from "~/types";
+import { CreatorSheet } from "~/components/creator/creator-sheet";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
 import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
-
-export const dynamic = "force-dynamic";
 
 export const Tournament = async ({
   tournamentId,
@@ -47,6 +46,18 @@ export const Tournament = async ({
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32">
+      <Link
+        href="/dashboard"
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "absolute top-8 left-2"
+        )}
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" /> Go Back
+      </Link>
+      {league.tournamentInfo.creatorId === session.user.id && (
+        <CreatorSheet tournamentId={tournamentId} />
+      )}
       <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
         <div className="space-y-3">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -96,6 +107,7 @@ export const Tournament = async ({
       <div className="flex items-center justify-center gap-x-2 mt-8">
         <PreviousRoundResults
           participants={sortedParticipants}
+          tournamentId={tournamentId}
           rounds={league.rounds}
         />
         <Link className={buttonVariants()} href={`/t/${tournamentId}/add`}>
@@ -158,9 +170,9 @@ const ParticipantRow = ({
       <p className="text-sm">{totalAvg.toFixed(2)}</p>
       <p className="text-sm">{totalPoints}</p>
       <div className="flex justify-around items-center col-span-4">
-        {recentForm.map((roundResult) => (
+        {recentForm.map((roundResult, index) => (
           <RecentForm
-            key={roundResult.round.id}
+            key={index}
             round={roundResult}
             participants={participants}
           />

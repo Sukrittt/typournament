@@ -16,11 +16,13 @@ import { ExtendedParticipantType, ExtendedRound } from "~/types";
 interface PreviousRoundResultsProps {
   rounds: ExtendedRound[];
   participants: ExtendedParticipantType[];
+  tournamentId: number;
 }
 
 export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
   rounds,
   participants,
+  tournamentId,
 }) => {
   return (
     <Sheet>
@@ -38,7 +40,7 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
         {rounds.length === 0 && (
           <Link
             className={buttonVariants({ variant: "link" })}
-            href={`/t/${rounds[0].round.tournamentId}/add`}
+            href={`/t/${tournamentId}/add`}
           >
             Add Round Results
           </Link>

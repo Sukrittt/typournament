@@ -19,6 +19,7 @@ import {
   users,
 } from "~/db/schema";
 import { ExtendedRound } from "~/types";
+import { requestRouter } from "./request";
 
 export const tournamentRouter = createTRPCRouter({
   getUserParticipations: privateProcedure.query(async ({ ctx }) => {
@@ -118,17 +119,8 @@ export const tournamentRouter = createTRPCRouter({
 
       const tournamentId = parseInt(createdTournament.insertId);
 
-      const parsedEmailIds = input.emailIds.filter(
-        (emailId) => emailId !== ctx.emailId
-      );
-
-      const requestedUserIds = await getUserIdsByEmail(parsedEmailIds);
-
-      await Promise.all(
-        requestedUserIds.map(async (userId) => {
-          await sendRequest(ctx.userId, userId, tournamentId);
-        })
-      );
+      const caller = requestRouter.createCaller(ctx);
+      caller.createRequests({ tournamentId, emailIds: input.emailIds });
 
       await db.insert(participation).values({
         tournamentId,
@@ -138,44 +130,6 @@ export const tournamentRouter = createTRPCRouter({
       return { tournamentId };
     }),
 });
-
-const getUserIdsByEmail = async (emailIds: string[]) => {
-  const requestUserIds: string[] = (
-    await Promise.all(
-      emailIds.map(async (emailId) => {
-        const user = await db
-          .select({
-            id: users.id,
-          })
-          .from(users)
-          .where(eq(users.email, emailId));
-
-        if (user && user.length > 0) {
-          const userId = user[0].id;
-          return userId;
-        }
-      })
-    )
-  ).filter((userId) => userId !== undefined) as string[];
-
-  return requestUserIds;
-};
-
-const sendRequest = async (
-  senderId: string,
-  receiverId: string,
-  tournamentId: number
-) => {
-  try {
-    await db.insert(request).values({
-      tournamentId,
-      senderId,
-      receiverId,
-    });
-  } catch (error) {
-    console.log("Something went wrong with sending request.", error);
-  }
-};
 
 const getFormattedRounds = (rounds: { score: Score; round: Round }[]) => {
   const formattedRounds: ExtendedRound[] = [];

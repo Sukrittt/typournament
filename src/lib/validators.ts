@@ -5,6 +5,15 @@ export const createTournamentSchema = z.object({
   emailIds: z.string().email().array().min(1).max(10),
 });
 
+export const addParticipantsSchema = createTournamentSchema
+  .omit({
+    name: true,
+  })
+  .extend({
+    tournamentId: z.number(),
+  });
+export type AddParticipantsValidator = z.infer<typeof addParticipantsSchema>;
+
 export type CreateTournamentValidator = z.infer<typeof createTournamentSchema>;
 
 export const createRoundSchema = z.object({

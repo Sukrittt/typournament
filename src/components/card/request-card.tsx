@@ -59,7 +59,7 @@ export const RequestCard = ({
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-x-2">
           <div className="space-y-2">
             <CardTitle>{requestData.sender.name}</CardTitle>
             <CardDescription>
