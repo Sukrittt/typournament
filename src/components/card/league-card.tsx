@@ -59,7 +59,7 @@ export const LeagueCard = ({ league }: { league: League }) => {
             key={index}
           >
             <content.icon className="h-4 w-4" />
-            <span className="text-sm">{content.value}</span>
+            <span className="text-sm pt-1">{content.value}</span>
           </div>
         ))}
       </CardContent>

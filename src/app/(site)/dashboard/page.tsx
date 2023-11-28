@@ -12,6 +12,7 @@ import { Requests } from "~/components/request";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
 import { UserCard } from "~/components/card/user-card";
+import { Loader } from "lucide-react";
 
 export default async function Dashboard() {
   const session = await getAuthSession();
@@ -28,12 +29,18 @@ export default async function Dashboard() {
           <Logout />
         </div>
       </div>
-      <div className="h-screen pt-28 flex max-w-5xl flex-col gap-y-8 ">
+      <div className="h-screen pt-28 flex w-[64rem] flex-col gap-y-8 ">
         <div className="flex items-center justify-between w-full">
           <h1 className="text-2xl font-extrabold text-popover-foreground">
             {siteConfig.name}.
           </h1>
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense
+            fallback={
+              <span className="text-sm text-muted-foreground hover:underline underline-offset-4">
+                Tournament Requests (-)
+              </span>
+            }
+          >
             <Requests />
           </Suspense>
         </div>
@@ -43,10 +50,18 @@ export default async function Dashboard() {
         </Link>
 
         <Separator />
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<LeagueFallback />}>
           <Leagues />
         </Suspense>
       </div>
     </>
   );
 }
+
+const LeagueFallback = () => {
+  return (
+    <div className="flex justify-center mt-4">
+      <Loader className="w-8 h-8 animate-spin text-zinc-600" />
+    </div>
+  );
+};

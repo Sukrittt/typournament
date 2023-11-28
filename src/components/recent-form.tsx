@@ -21,7 +21,7 @@ export const RecentForm: FC<RecentFormProps> = ({ round, participants }) => {
           }
         >
           <div className="flex items-center justify-center h-6 w-6 rounded-full bg-green-500 text-white text-xs border border-green-500">
-            W
+            <span className="pt-px">W</span>
           </div>
         </CustomToolTip>
       );
@@ -34,7 +34,7 @@ export const RecentForm: FC<RecentFormProps> = ({ round, participants }) => {
           }
         >
           <div className="flex items-center justify-center h-6 w-6 rounded-full bg-red-600 text-white text-xs border border-red-500">
-            L
+            <span className="pt-px">L</span>
           </div>
         </CustomToolTip>
       );
@@ -47,14 +47,14 @@ export const RecentForm: FC<RecentFormProps> = ({ round, participants }) => {
           }
         >
           <div className="flex items-center justify-center h-6 w-6 rounded-full text-xs bg-yellow-600 border-yellow-600 text-white">
-            D
+            <span className="pt-px">D</span>
           </div>
         </CustomToolTip>
       );
       break;
     case "nan":
       return (
-        <div className="flex items-center justify-center h-6 w-6 rounded-full text-xs bg-gray-700 text-white">
+        <div className="flex items-center justify-center h-6 w-6 rounded-full text-xs bg-zinc-800 text-white">
           -
         </div>
       );
@@ -62,8 +62,8 @@ export const RecentForm: FC<RecentFormProps> = ({ round, participants }) => {
 
     default:
       return (
-        <div className="flex items-center justify-center h-6 w-6 rounded-full text-xs bg-gray-700 text-white">
-          ?
+        <div className="flex items-center justify-center h-6 w-6 rounded-full text-xs bg-zinc-800 text-white">
+          <span className="pt-px">?</span>
         </div>
       );
       break;

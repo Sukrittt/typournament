@@ -95,7 +95,7 @@ export const CreateTournament = () => {
           href="/dashboard"
           className={cn(
             buttonVariants({ variant: "link" }),
-            "text-white w-fit"
+            "text-white w-fit pl-0"
           )}
         >
           Go Back
@@ -155,7 +155,11 @@ export const CreateTournament = () => {
           )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? <Loader className="h-4 w-4 animate-spin" /> : "Create"}
+            {isLoading ? (
+              <Loader className="h-4 w-4 animate-spin" />
+            ) : (
+              <span className="pt-1">Create</span>
+            )}
           </Button>
         </form>
       </Form>

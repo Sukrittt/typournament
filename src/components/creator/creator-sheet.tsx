@@ -35,7 +35,8 @@ export const CreatorSheet = ({ tournamentId }: { tournamentId: number }) => {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="ghost" className="absolute top-8 right-2">
-          <LockKeyhole className="h-4 w-4 mr-2" /> Creator Panel
+          <LockKeyhole className="h-4 w-4 mr-2" />
+          <span className="pt-1">Creator Panel</span>
         </Button>
       </SheetTrigger>
       <SheetContent className="w-[350px]">
@@ -51,7 +52,7 @@ export const CreatorSheet = ({ tournamentId }: { tournamentId: number }) => {
             <Link href={list.href} key={index}>
               <div className="flex gap-x-2 items-center hover:bg-neutral-800 transition p-2 rounded-md text-neutral-300">
                 <list.icon className="h-5 w-5" />
-                <p>{list.label}</p>
+                <p className="pt-0.5">{list.label}</p>
               </div>
             </Link>
           ))}

@@ -87,13 +87,13 @@ export const AddParticipantsForm = ({
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center mx-auto max-w-md space-y-8">
+    <div className="h-screen flex flex-col justify-center w-full max-w-md space-y-8">
       <div className="space-y-2">
         <Link
           href={`/t/${tournamentId}/requests`}
           className={cn(
             buttonVariants({ variant: "link" }),
-            "text-white w-fit"
+            "text-white w-fit pl-0"
           )}
         >
           Go Back
@@ -101,7 +101,7 @@ export const AddParticipantsForm = ({
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Add Participants</h1>
           <p className="text-muted-foreground">
-            Add email Ids of participants.
+            Add email Ids of the participants.
           </p>
         </div>
       </div>
@@ -115,7 +115,8 @@ export const AddParticipantsForm = ({
               onChange={(e) => setEmail(e.target.value)}
             />
             <Button type="button" onClick={handleAddEmail}>
-              <Plus className="h-4 w-4 mr-2" /> Add Participant
+              <Plus className="h-4 w-4 mr-2" />{" "}
+              <span className="pt-1">Add Participant</span>
             </Button>
           </div>
 
@@ -142,7 +143,7 @@ export const AddParticipantsForm = ({
             {isLoading ? (
               <Loader className="h-4 w-4 animate-spin" />
             ) : (
-              "Add Participants"
+              <span className="pt-1">Add Participants</span>
             )}
           </Button>
         </form>

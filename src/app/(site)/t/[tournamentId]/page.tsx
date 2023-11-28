@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { LoadingScreen } from "~/components/loading-screen";
 
 import { Tournament } from "~/components/tournament";
 
@@ -12,7 +13,7 @@ export default function TournamentPage({ params }: TournamentPageProps) {
   const { tournamentId } = params;
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<LoadingScreen />}>
       <Tournament tournamentId={parseInt(tournamentId)} />
     </Suspense>
   );

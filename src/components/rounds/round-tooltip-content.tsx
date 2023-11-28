@@ -46,7 +46,7 @@ export const RoundToolTipContent: React.FC<RoundToolTipContentProps> = ({
           <UserAvatar user={participantOne.user} className="h-6 w-6" />
         </div>
 
-        <div className="h-6 flex items-center text-xs px-2 justify-center rounded-md bg-primary text-white">
+        <div className="h-6 flex items-center text-xs px-2 justify-center rounded-md bg-zinc-800 text-white">
           {participantOneScore} - {participantTwoScore}
         </div>
 

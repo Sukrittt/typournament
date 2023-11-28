@@ -53,7 +53,8 @@ export const Tournament = async ({
           "absolute top-8 left-4"
         )}
       >
-        <ArrowLeft className="h-4 w-4 mr-2" /> Go Back
+        <ArrowLeft className="h-4 w-4 mr-2" />{" "}
+        <span className="pt-1">Go Back</span>
       </Link>
       {league.tournamentInfo.creatorId === session.user.id && (
         <CreatorSheet tournamentId={tournamentId} />
