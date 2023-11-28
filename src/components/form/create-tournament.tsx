@@ -89,7 +89,7 @@ export const CreateTournament = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center mx-auto max-w-md space-y-8">
+    <div className="h-screen flex flex-col justify-center w-full max-w-md space-y-8">
       <div className="space-y-2">
         <Link
           href="/dashboard"

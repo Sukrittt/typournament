@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Typeournament",
+  name: "Typournament",
   description: "A tournament platform for typing enthusiasts.",
 };
 

@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import { GeistSans } from "geist/font/sans";
+import { League_Spartan } from "next/font/google";
 
 import "./styles/globals.css";
-import { Providers } from "~/components/providers";
 import { siteConfig } from "~/config";
+import { Providers } from "~/components/providers";
+import { cn } from "~/lib/utils";
+
+const font = League_Spartan({ subsets: ["latin"], weight: "500" });
 
 export const metadata: Metadata = {
   // metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
@@ -55,13 +59,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={GeistSans.className}>
-        <main className="content">
-          <Providers>
-            <Toaster />
-            {children}
-          </Providers>
-        </main>
+      {/* <body className={GeistSans.className}> */}
+      <body
+        className={cn(
+          font.className,
+          "bg-gradient-to-r from-[#000] to-[#1e1e1e]"
+        )}
+      >
+        <Providers>
+          <Toaster />
+          {children}
+        </Providers>
       </body>
     </html>
   );

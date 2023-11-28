@@ -6,6 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
+import { siteConfig } from "~/config";
 import { ExtendedRequest } from "~/types";
 import { Separator } from "~/components/ui/separator";
 import { RequestCard } from "~/components/card/request-card";
@@ -15,7 +16,7 @@ export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
     <Sheet>
       <SheetTrigger asChild>
         <span className="cursor-pointer text-sm text-muted-foreground hover:underline underline-offset-4">
-          Tournament Requests ({data.requests.length})
+          {siteConfig.name} Requests ({data.requests.length})
         </span>
       </SheetTrigger>
       <SheetContent className="min-w-[600px]">
