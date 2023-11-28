@@ -311,7 +311,7 @@ export const AddResults: FC<AddResulsProps> = ({
             className="w-full"
             variant="outline"
           >
-            Go Back
+            <span className="pt-1">Go Back</span>
           </Button>
           <Button
             onClick={handleAddResults}
@@ -321,7 +321,7 @@ export const AddResults: FC<AddResulsProps> = ({
             {isLoading ? (
               <Loader className="h-4 w-4 animate-spin" />
             ) : (
-              "Kick Off"
+              <span className="pt-1">Kick Off</span>
             )}
           </Button>
         </div>

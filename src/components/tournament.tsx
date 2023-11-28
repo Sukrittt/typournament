@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import { redirect } from "next/navigation";
-import { ArrowLeft, Crown, LucideProps } from "lucide-react";
 import { serverClient } from "~/trpc/server-client";
+import { ArrowLeft, Crown, LucideProps } from "lucide-react";
 
 import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
 import { Badge } from "~/components/ui/badge";
 import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
-import { UserCard } from "~/components/card/user-card";
 import { cn, getCustomizedUserName } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
@@ -17,6 +16,7 @@ import { ExtendedParticipantType, ExtendedRound } from "~/types";
 import { CreatorSheet } from "~/components/creator/creator-sheet";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { ParticipantCard } from "~/components/card/participant-card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
 import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
 
@@ -111,7 +111,7 @@ export const Tournament = async ({
           rounds={league.rounds}
         />
         <Link className={buttonVariants()} href={`/t/${tournamentId}/add`}>
-          Add Round Results
+          <span className="pt-0.5">Add Round Results</span>
           <IconArrowright className="ml-2 h-4 w-4" />
         </Link>
       </div>
@@ -157,12 +157,12 @@ const ParticipantRow = ({
         </CustomToolTip>
       )}
       <p>{position}</p>
-      <UserCard participant={participant}>
+      <ParticipantCard participant={participant}>
         <div className="flex gap-x-2 items-center col-span-2">
           <UserAvatar user={participant.user} className="h-5 w-5" />
           <p className="font-medium text-lg">{participantName}</p>
         </div>
-      </UserCard>
+      </ParticipantCard>
       <p className="text-sm">{rounds.length}</p>
       <p className="text-sm">{totalWins}</p>
       <p className="text-sm">{totalDraw}</p>

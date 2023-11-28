@@ -130,7 +130,8 @@ export const CreateTournament = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <Button type="button" onClick={handleAddEmail}>
-              <Plus className="h-4 w-4 mr-2" /> Add Participant
+              <Plus className="h-4 w-4 mr-2" />{" "}
+              <span className="pt-1">Add Participant</span>
             </Button>
           </div>
 

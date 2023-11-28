@@ -8,6 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
+import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
 import { RoundCard } from "~/components/card/round-card";
 import { Button, buttonVariants } from "~/components/ui/button";
@@ -27,7 +28,9 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Previous Results</Button>
+        <Button variant="outline">
+          <span className="pt-0.5">Previous Results</span>
+        </Button>
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
@@ -38,12 +41,14 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
         </SheetHeader>
         <Separator className="my-4" />
         {rounds.length === 0 && (
-          <Link
-            className={buttonVariants({ variant: "link" })}
-            href={`/t/${tournamentId}/add`}
-          >
-            Add Round Results
-          </Link>
+          <div className="w-full flex justify-center">
+            <Link
+              className={cn(buttonVariants({ variant: "link" }), "text-center")}
+              href={`/t/${tournamentId}/add`}
+            >
+              Add Round Results
+            </Link>
+          </div>
         )}
         <div className="flex flex-col gap-y-4">
           {rounds.map((round) => (
