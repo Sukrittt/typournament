@@ -10,6 +10,7 @@ import { Badge } from "~/components/ui/badge";
 import { getCustomizedUserName } from "~/lib/utils";
 import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
+import { UserCard } from "~/components/card/user-card";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { ExtendedParticipantType, ExtendedRound } from "~/types";
@@ -17,7 +18,6 @@ import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
 import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
-import { tournament } from "~/db/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -136,17 +136,21 @@ const ParticipantRow = ({
   return (
     <div className="grid grid-cols-13 py-2 text-neutral-200 items-center relative">
       {highestWPM && (
-        <CustomToolTip content={<p className="text-xs">{highestWPM} WPM</p>}>
+        <CustomToolTip
+          content={<p className="text-xs">Highest Average: {highestWPM} WPM</p>}
+        >
           <Badge className="absolute left-3 rounded-full p-0.5 pl-[3px]">
             <Crown className="h-3 w-3 rounded-full" />
           </Badge>
         </CustomToolTip>
       )}
       <p>{position}</p>
-      <div className="flex gap-x-2 items-center col-span-2">
-        <UserAvatar user={participant.user} className="h-5 w-5" />
-        <p className="font-medium text-lg">{participantName}</p>
-      </div>
+      <UserCard participant={participant}>
+        <div className="flex gap-x-2 items-center col-span-2">
+          <UserAvatar user={participant.user} className="h-5 w-5" />
+          <p className="font-medium text-lg">{participantName}</p>
+        </div>
+      </UserCard>
       <p className="text-sm">{rounds.length}</p>
       <p className="text-sm">{totalWins}</p>
       <p className="text-sm">{totalDraw}</p>
