@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { Loader, LucideProps } from "lucide-react";
 
-import { Card } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 
 type LoadingState = "google" | "github";
@@ -37,38 +36,36 @@ export const AuthForm = () => {
   };
 
   return (
-    <Card className="p-10 space-y-6 bg-[#161B22] rounded-lg shadow-lg">
-      <div className="flex flex-col space-y-4">
-        <Button
-          onClick={handleGoogleLogin}
-          disabled={isLoading == "google"}
-          className="w-full bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
-          <div className="flex items-center justify-center">
-            {isLoading == "google" ? (
-              <Loader className="mr-3 animate-spin h-5 w-5" />
-            ) : (
-              <IconGoogle className="mr-3 h-5 w-5" />
-            )}
-            Sign in with Google
-          </div>
-        </Button>
-        <Button
-          onClick={handleGithubLogin}
-          disabled={isLoading == "github"}
-          className="w-full bg-gray-700 text-white rounded-lg hover:bg-gray-600"
-        >
-          <div className="flex items-center justify-center">
-            {isLoading == "github" ? (
-              <Loader className="mr-3 animate-spin h-5 w-5" />
-            ) : (
-              <IconGithub className="mr-3 h-5 w-5" />
-            )}
-            Sign in with Github
-          </div>
-        </Button>
-      </div>
-    </Card>
+    <div className="flex flex-col space-y-4">
+      <Button
+        onClick={handleGoogleLogin}
+        disabled={isLoading == "google"}
+        className="w-full bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      >
+        <div className="flex items-center justify-center">
+          {isLoading == "google" ? (
+            <Loader className="mr-3 animate-spin h-5 w-5" />
+          ) : (
+            <IconGoogle className="mr-3 h-5 w-5" />
+          )}
+          <span className="pt-1">Sign in with Google</span>
+        </div>
+      </Button>
+      <Button
+        onClick={handleGithubLogin}
+        disabled={isLoading == "github"}
+        className="w-full bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+      >
+        <div className="flex items-center justify-center">
+          {isLoading == "github" ? (
+            <Loader className="mr-3 animate-spin h-5 w-5" />
+          ) : (
+            <IconGithub className="mr-3 h-5 w-5" />
+          )}
+          <span className="pt-1">Sign in with Github</span>
+        </div>
+      </Button>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { cn } from "~/lib/utils";
+import { siteConfig } from "~/config";
 import { buttonVariants } from "~/components/ui/button";
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
       <div className="flex flex-col items-center space-y-8 text-center">
         <div className="space-y-4">
           <h1 className="max-w-4xl text-5xl font-bold md:text-6xl lg:text-7xl tracking-tighter sm:text-4xl">
-            Welcome to <span className="text-blue-500">Typeournament.</span>
+            Welcome to <span className="text-primary">{siteConfig.name}.</span>
           </h1>
           <p className="mx-auto max-w-[700px] md:text-xl text-muted-foreground">
             Challenge Yourself and Elevate Your Skills in the Thrilling Arena of
