@@ -1,19 +1,23 @@
+import Link from "next/link";
 import { Fragment } from "react";
 import { redirect } from "next/navigation";
-import { LucideProps } from "lucide-react";
+import { Crown, LucideProps } from "lucide-react";
 import { serverClient } from "~/trpc/server-client";
 
-import Link from "next/link";
 import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
+import { Badge } from "~/components/ui/badge";
 import { getCustomizedUserName } from "~/lib/utils";
 import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
-import { buttonVariants } from "~/components/ui/button";
+import { CustomToolTip } from "~/components/ui/custom-tooltip";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { ExtendedParticipantType, ExtendedRound } from "~/types";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
+import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
+import { tournament } from "~/db/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +35,15 @@ export const Tournament = async ({
     participants: league.participants,
     rounds: league.rounds,
   });
+
+  const getHighestWPM = (participant: ExtendedParticipantType) => {
+    if (!league.tournamentInfo.highestWPMUserId) return null;
+
+    if (league.tournamentInfo.highestWPMUserId !== participant.user.id)
+      return null;
+
+    return league.tournamentInfo.highestWPM;
+  };
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32">
@@ -59,23 +72,32 @@ export const Tournament = async ({
           </CardHeader>
           <Separator />
           <CardContent className="py-3 px-0 flex flex-col gap-y-2">
-            {sortedParticipants.map((participant, index) => (
-              <Fragment key={participant.participation.id}>
-                <ParticipantRow
-                  position={index + 1}
-                  totalAvg={participant.totalAvg}
-                  totalPoints={participant.totalPoints}
-                  participant={participant}
-                  rounds={league.rounds}
-                  participants={sortedParticipants}
-                />
-                {index < league.participants.length - 1 && <Separator />}
-              </Fragment>
-            ))}
+            {sortedParticipants.map((participant, index) => {
+              const highestWPM = getHighestWPM(participant);
+
+              return (
+                <Fragment key={participant.participation.id}>
+                  <ParticipantRow
+                    position={index + 1}
+                    totalAvg={participant.totalAvg}
+                    totalPoints={participant.totalPoints}
+                    participant={participant}
+                    rounds={league.rounds}
+                    participants={sortedParticipants}
+                    highestWPM={highestWPM}
+                  />
+                  {index < league.participants.length - 1 && <Separator />}
+                </Fragment>
+              );
+            })}
           </CardContent>
         </Card>
       </div>
-      <div className="flex items-center justify-center mt-8">
+      <div className="flex items-center justify-center gap-x-2 mt-8">
+        <PreviousRoundResults
+          participants={sortedParticipants}
+          rounds={league.rounds}
+        />
         <Link className={buttonVariants()} href={`/t/${tournamentId}/add`}>
           Add Round Results
           <IconArrowright className="ml-2 h-4 w-4" />
@@ -92,6 +114,7 @@ interface ParticipantRowProps {
   totalPoints: number;
   totalAvg: number;
   participants: ExtendedParticipantType[];
+  highestWPM: number | null;
 }
 const ParticipantRow = ({
   participant,
@@ -100,6 +123,7 @@ const ParticipantRow = ({
   totalAvg,
   totalPoints,
   participants,
+  highestWPM,
 }: ParticipantRowProps) => {
   const { totalWins, totalLoss, totalDraw, recentForm } = useParticipantScores({
     participant,
@@ -110,7 +134,14 @@ const ParticipantRow = ({
   }); //use short for sm device
 
   return (
-    <div className="grid grid-cols-13 py-2 text-neutral-200 items-center">
+    <div className="grid grid-cols-13 py-2 text-neutral-200 items-center relative">
+      {highestWPM && (
+        <CustomToolTip content={<p className="text-xs">{highestWPM} WPM</p>}>
+          <Badge className="absolute left-3 rounded-full p-0.5 pl-[3px]">
+            <Crown className="h-3 w-3 rounded-full" />
+          </Badge>
+        </CustomToolTip>
+      )}
       <p>{position}</p>
       <div className="flex gap-x-2 items-center col-span-2">
         <UserAvatar user={participant.user} className="h-5 w-5" />
