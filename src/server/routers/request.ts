@@ -134,6 +134,24 @@ export const requestRouter = createTRPCRouter({
 
       await Promise.all(
         requestedUserIds.map(async (userId) => {
+          const existingRequest = await db
+            .select()
+            .from(request)
+            .where(
+              and(
+                eq(request.senderId, ctx.userId),
+                eq(request.receiverId, userId),
+                eq(request.tournamentId, input.tournamentId)
+              )
+            );
+
+          if (existingRequest.length > 0) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Request already exists",
+            });
+          }
+
           await sendRequest(ctx.userId, userId, input.tournamentId);
         })
       );
