@@ -24,18 +24,18 @@ export const ParticipantCard: React.FC<ParticipantCardProps> = ({
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent>
-        <div className="flex gap-x-4">
+        <div className="flex gap-x-2">
           <UserAvatar user={participant.user} className="h-6 w-6" />
 
-          <div className="space-y-1">
+          <div className="space-y-1 max-w-[12rem]">
             <h4 className="text-sm font-semibold text-left">
               @{username.toLowerCase()}
             </h4>
-            <p className="text-sm">{participant.user.email}</p>
+            <p className="text-sm truncate">{participant.user.email}</p>
             <div className="flex items-center pt-2">
               <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
               <span className="text-xs text-muted-foreground">
-                Joined at{" "}
+                Joined on{" "}
                 {getFormattedDate(
                   participant.participation.createdAt,
                   "MMMM yyyy"

@@ -45,3 +45,4 @@ export type ExtendedRound = {
 };
 
 export type RoundStatus = "win" | "loss" | "draw" | "nan";
+export type Trajectory = "up" | "down" | "same";

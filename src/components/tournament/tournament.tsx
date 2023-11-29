@@ -7,18 +7,19 @@ import { ArrowLeft, Crown, LucideProps } from "lucide-react";
 import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
 import { Badge } from "~/components/ui/badge";
-import { RecentForm } from "~/components/recent-form";
 import { Separator } from "~/components/ui/separator";
 import { cn, getCustomizedUserName } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
-import { ExtendedParticipantType, ExtendedRound } from "~/types";
+import { ExtendedParticipantType, ExtendedRound, Trajectory } from "~/types";
+import { RecentForm } from "~/components/tournament/recent-form";
 import { CreatorSheet } from "~/components/creator/creator-sheet";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { ParticipantCard } from "~/components/card/participant-card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
+import { RecentPosition } from "~/components/tournament/recent-position";
 import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
 
 export const Tournament = async ({
@@ -31,7 +32,7 @@ export const Tournament = async ({
   if (!session) redirect("/sign-in");
 
   const league = await serverClient.tournament.getLeague({ tournamentId });
-  const { sortedParticipants } = useSortedParticipants({
+  const { sortedParticipants, prevRoundParticipants } = useSortedParticipants({
     participants: league.participants,
     rounds: league.rounds,
   });
@@ -44,6 +45,28 @@ export const Tournament = async ({
     }
 
     return league.tournamentInfo.highestWPM;
+  };
+
+  const getParticipantTrajectory = (
+    participant: ExtendedParticipantType,
+    currentPosition: number
+  ): Trajectory => {
+    const prevRoundParticipantIndex = prevRoundParticipants.findIndex(
+      (prevRoundParticipant) =>
+        prevRoundParticipant.participation.id === participant.participation.id
+    );
+    const prevRoundPosition = prevRoundParticipantIndex + 1;
+
+    console.log("                   ");
+    console.log("email", participant.user.email);
+    console.log("prevRoundPosition", prevRoundPosition);
+    console.log("currentPosition", currentPosition);
+
+    if (prevRoundPosition === currentPosition) return "same";
+
+    if (prevRoundPosition > currentPosition) return "up";
+
+    return "down";
   };
 
   return (
@@ -72,8 +95,8 @@ export const Tournament = async ({
         </div>
         <Card className="shadow-sm rounded-lg">
           <CardHeader className="p-3 text-sm text-muted-foreground">
-            <div className="grid grid-cols-13 font-semibold items-center">
-              <p className="mx-4">Position</p>
+            <div className="grid grid-cols-14 font-semibold items-center">
+              <p className="mx-4 col-span-2">Position</p>
               <p className="text-left mx-4 col-span-2">Name</p>
               <p className="mx-4">Played</p>
               <p className="mx-4">Won</p>
@@ -89,6 +112,10 @@ export const Tournament = async ({
             <CardContent className="py-3 px-0 flex flex-col gap-y-2">
               {sortedParticipants.map((participant, index) => {
                 const highestWPM = getHighestWPM(participant);
+                const participantTrajectory = getParticipantTrajectory(
+                  participant,
+                  index + 1
+                );
 
                 return (
                   <Fragment key={participant.participation.id}>
@@ -100,6 +127,7 @@ export const Tournament = async ({
                       rounds={league.rounds}
                       participants={sortedParticipants}
                       highestWPM={highestWPM}
+                      trajectory={participantTrajectory}
                     />
                     {index < league.participants.length - 1 && <Separator />}
                   </Fragment>
@@ -130,8 +158,9 @@ interface ParticipantRowProps {
   rounds: ExtendedRound[];
   totalPoints: number;
   totalAvg: number;
-  participants: ExtendedParticipantType[];
   highestWPM: number | null;
+  participants: ExtendedParticipantType[];
+  trajectory: Trajectory;
 }
 const ParticipantRow = ({
   participant,
@@ -141,34 +170,39 @@ const ParticipantRow = ({
   totalPoints,
   participants,
   highestWPM,
+  trajectory,
 }: ParticipantRowProps) => {
-  const { totalWins, totalLoss, totalDraw, recentForm } = useParticipantScores({
-    participant,
-    rounds,
-  });
+  const { totalWins, totalLoss, totalDraw, totalPlayed, recentForm } =
+    useParticipantScores({
+      participant,
+      rounds,
+    });
   const participantName = getCustomizedUserName({
     username: participant.user.name,
   }); //use short for sm device
 
   return (
-    <div className="grid grid-cols-13 py-2 text-neutral-200 items-center relative">
+    <div className="grid grid-cols-14 py-2 text-neutral-200 items-center relative">
       {highestWPM && (
         <CustomToolTip
           content={<p className="text-xs">Highest Average: {highestWPM} WPM</p>}
         >
-          <Badge className="absolute left-3 rounded-full p-0.5 pl-[3px]">
+          <Badge className="absolute left-6 top-[13px] rounded-full p-0.5 pl-[2.5px]">
             <Crown className="h-3 w-3 rounded-full" />
           </Badge>
         </CustomToolTip>
       )}
-      <p>{position}</p>
+      <div className="flex justify-center pl-3 items-center gap-x-3 col-span-2">
+        <p>{position}</p>
+        <RecentPosition trajectory={trajectory} />
+      </div>
       <ParticipantCard participant={participant}>
         <div className="flex gap-x-2 items-center col-span-2">
           <UserAvatar user={participant.user} className="h-5 w-5" />
-          <p className="font-medium text-lg">{participantName}</p>
+          <p className="font-medium text-lg pt-1">{participantName}</p>
         </div>
       </ParticipantCard>
-      <p className="text-sm">{rounds.length}</p>
+      <p className="text-sm">{totalPlayed}</p>
       <p className="text-sm">{totalWins}</p>
       <p className="text-sm">{totalDraw}</p>
       <p className="text-sm">{totalLoss}</p>

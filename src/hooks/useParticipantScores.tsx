@@ -11,7 +11,17 @@ export const useParticipantScores = ({
   participant,
   rounds,
 }: ParticipantRowProps) => {
-  const { totalWins, totalLoss, totalDraw } = rounds.reduce(
+  const getParticipatedRoundsByParticipant = () => {
+    return rounds.filter((round) => {
+      return round.score.some((score) => {
+        return score.participationId === participant.participation.id;
+      });
+    });
+  };
+
+  const participatedRounds = getParticipatedRoundsByParticipant();
+
+  const { totalWins, totalLoss, totalDraw } = participatedRounds.reduce(
     (accumulator, match) => {
       const incrementWinCount =
         !match.round.draw && match.round.winnerId === participant.user.id
@@ -32,15 +42,17 @@ export const useParticipantScores = ({
     { totalWins: 0, totalLoss: 0, totalDraw: 0 }
   );
 
-  const recentFormRaw = rounds.slice(0, RECENT_ROUND_COUNT).map((match) => {
-    if (match.round.draw) {
-      return { ...match, status: "draw" as const };
-    } else if (match.round.winnerId === participant.user.id) {
-      return { ...match, status: "win" as const };
-    } else {
-      return { ...match, status: "loss" as const };
-    }
-  });
+  const recentFormRaw = participatedRounds
+    .slice(0, RECENT_ROUND_COUNT)
+    .map((match) => {
+      if (match.round.draw) {
+        return { ...match, status: "draw" as const };
+      } else if (match.round.winnerId === participant.user.id) {
+        return { ...match, status: "win" as const };
+      } else {
+        return { ...match, status: "loss" as const };
+      }
+    });
 
   const notPlayedCount = RECENT_ROUND_COUNT - recentFormRaw.length;
   const notPlayed = Array.from({ length: notPlayedCount }, () => {
@@ -53,6 +65,7 @@ export const useParticipantScores = ({
     totalWins,
     totalLoss,
     totalDraw,
+    totalPlayed: participatedRounds.length,
     recentForm,
   };
 };

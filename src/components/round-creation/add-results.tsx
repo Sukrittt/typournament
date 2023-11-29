@@ -13,6 +13,7 @@ import { RoundSchema } from "~/lib/validators";
 import { Button } from "~/components/ui/button";
 import { RoundComponentVariants } from "~/config/motion";
 import { getCustomizedUserName, isValidFloat } from "~/lib/utils";
+import UserAvatar from "../avatar";
 
 interface AddResulsProps {
   participantOne: User | null;
@@ -239,7 +240,7 @@ export const AddResults: FC<AddResulsProps> = ({
       >
         <div className="flex items-center justify-center gap-x-8">
           <div className="space-y-4">
-            <h1 className="font-bold text-2xl text-center text-neutral-200">
+            <h1 className="font-bold text-2xl text-center text-neutral-200 pt-1.5">
               {getCustomizedUserName({ username: participantOne.name })}
             </h1>
 
@@ -270,11 +271,15 @@ export const AddResults: FC<AddResulsProps> = ({
               />
             </div>
           </div>
-          <span className="text-muted-foreground text-2xl mt-12 font-extrabold">
-            VS
-          </span>
+          <div className="flex gap-x-3 items-center mt-12">
+            <UserAvatar user={participantOne} className="h-6 w-6" />
+            <span className="text-muted-foreground text-2xl mt-1.5 font-extrabold">
+              VS
+            </span>
+            <UserAvatar user={participantTwo} className="h-6 w-6" />
+          </div>
           <div className="space-y-4">
-            <h1 className="font-bold text-2xl text-center text-neutral-200">
+            <h1 className="font-bold text-2xl text-center text-neutral-200 pt-1.5">
               {getCustomizedUserName({ username: participantTwo.name })}
             </h1>
 

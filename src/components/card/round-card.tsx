@@ -43,7 +43,7 @@ export const RoundCard: React.FC<PreviousRoundResultProps> = ({
 
   return (
     <div className="p-2 space-y-3 w-full">
-      <div className="flex gap-x-2 justify-between">
+      <div className="flex gap-x-2 justify-around">
         <div className="flex items-center gap-x-2">
           <p>
             {getCustomizedUserName({
@@ -60,7 +60,7 @@ export const RoundCard: React.FC<PreviousRoundResultProps> = ({
             </p>
           }
         >
-          <div className="h-6 w-24 flex items-center text-xs px-2 justify-center rounded-md bg-primary text-black">
+          <div className="h-6 w-24 flex items-center text-xs px-2 justify-center rounded-md bg-zinc-800 text-white">
             {participantOneScore} - {participantTwoScore}
           </div>
         </CustomToolTip>

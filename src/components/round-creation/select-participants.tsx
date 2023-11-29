@@ -1,6 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { FC, useEffect } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
+import { FC, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import {
   Select,
@@ -10,11 +11,11 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { User } from "~/db/schema";
+import { cn } from "~/lib/utils";
+import UserAvatar from "~/components/avatar";
+import { buttonVariants } from "~/components/ui/button";
 import { RoundComponentVariants } from "~/config/motion";
 import { ExtendedParticipantType, RoundFlow } from "~/types";
-import Link from "next/link";
-import { buttonVariants } from "../ui/button";
-import { cn } from "~/lib/utils";
 
 type Participant = Omit<ExtendedParticipantType, "scores">;
 
@@ -103,7 +104,13 @@ export const SelectParticipants: FC<SelectParticipantsProps> = ({
                       value={participant.user.email}
                       className="cursor-pointer"
                     >
-                      {participant.user.name}
+                      <div className="flex items-center gap-x-2">
+                        <UserAvatar
+                          user={participant.user}
+                          className="h-4 w-4"
+                        />
+                        <p className="pt-1">{participant.user.name}</p>
+                      </div>
                     </SelectItem>
                   ))
                 )}
@@ -139,7 +146,13 @@ export const SelectParticipants: FC<SelectParticipantsProps> = ({
                       value={participant.user.email}
                       className="cursor-pointer"
                     >
-                      {participant.user.name}
+                      <div className="flex items-center gap-x-2">
+                        <UserAvatar
+                          user={participant.user}
+                          className="h-4 w-4"
+                        />
+                        <p className="pt-1">{participant.user.name}</p>
+                      </div>
                     </SelectItem>
                   ))
                 )}
