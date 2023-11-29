@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import _debounce from "lodash/debounce";
 // @ts-ignore
 import useSound from "use-sound";
+import { useRouter } from "next/navigation";
 
+import { trpc } from "~/trpc/client";
 import { Tournament } from "~/db/schema";
 import { ShowWinner } from "~/components/tournament/show-winner";
 import { SelectWinner } from "~/components/tournament/select-winner";
 import { ExtendedParticipantType, ExtendedRound, RoundFlow } from "~/types";
-import { trpc } from "~/trpc/client";
 
 const uefaMusic = "/music/uefa.mp3";
 
@@ -28,6 +29,8 @@ export const AnnounceWinner: React.FC<AnnounceWinnerProps> = ({
   rounds,
   leagueDetails,
 }) => {
+  const router = useRouter();
+
   const [step, setStep] = useState<AddRoundStep>(
     equalParticipants.length > 0 ? "select-winner" : "announce-winner"
   );
@@ -63,7 +66,11 @@ export const AnnounceWinner: React.FC<AnnounceWinnerProps> = ({
     return () => sound?.unload();
   }, [sound]);
 
-  const { mutate: endTournament } = trpc.tournament.endTournament.useMutation();
+  const { mutate: endTournament } = trpc.tournament.endTournament.useMutation({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
 
   useEffect(() => {
     if (winningParticipant) {
