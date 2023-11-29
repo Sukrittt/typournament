@@ -45,7 +45,7 @@ export const Participants = async ({
 
       <Separator className="my-4" />
 
-      <ScrollArea className="h-[28rem] px-6 w-full rounded-md">
+      <ScrollArea className="h-[28rem] pr-6 w-full rounded-md">
         <div className="space-y-4">
           {participants.map(({ participation, user }) => (
             <ParticipantionCard

@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { LoadingScreen } from "~/components/loading-screen";
-import { CreatorRequests } from "~/components/creator/creator-requests";
+import { CreatorRequests } from "~/components/creator-requests";
 
 interface TournamentRequestsPageProps {
   params: {

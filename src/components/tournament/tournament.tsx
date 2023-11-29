@@ -9,17 +9,17 @@ import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Separator } from "~/components/ui/separator";
-import { cn, getCustomizedUserName, getFormattedDate } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
 import { RecentForm } from "~/components/tournament/recent-form";
-import { CreatorSheet } from "~/components/creator/creator-sheet";
+import { CreatorSheet } from "~/components/sheets/creator-sheet";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { ParticipantCard } from "~/components/card/participant-card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
 import { RecentPosition } from "~/components/tournament/recent-position";
+import { cn, getCustomizedUserName, getFormattedDate } from "~/lib/utils";
 import { ExtendedParticipantType, ExtendedRound, Trajectory } from "~/types";
 import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
 
@@ -120,7 +120,7 @@ export const Tournament = async ({
             </div>
           </CardHeader>
           <Separator />
-          <ScrollArea className="max-h-72 w-full rounded-md">
+          <ScrollArea className="max-h-72 pr-3 w-full rounded-md">
             <CardContent className="py-3 px-0 flex flex-col gap-y-2">
               {sortedParticipants.map((participant, index) => {
                 const highestWPM = getHighestWPM(participant);

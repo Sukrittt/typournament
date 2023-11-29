@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { Loader } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { cn } from "~/lib/utils";
@@ -10,9 +11,12 @@ import UserAvatar from "~/components/avatar";
 import { Leagues } from "~/components/leagues";
 import { Requests } from "~/components/request";
 import { Separator } from "~/components/ui/separator";
-import { buttonVariants } from "~/components/ui/button";
 import { UserCard } from "~/components/card/user-card";
-import { Loader } from "lucide-react";
+import { buttonVariants } from "~/components/ui/button";
+import { RulesSheet } from "~/components/sheets/rules-sheet";
+
+export const dynamic = "force-dyamic";
+export const fetchCache = "force-no-store";
 
 export default async function Dashboard() {
   const session = await getAuthSession();
@@ -54,6 +58,7 @@ export default async function Dashboard() {
           <Leagues />
         </Suspense>
       </div>
+      <RulesSheet />
     </>
   );
 }

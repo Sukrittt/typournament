@@ -1,23 +1,20 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { GeistSans } from "geist/font/sans";
 import { League_Spartan } from "next/font/google";
 
 import "./styles/globals.css";
+import { cn } from "~/lib/utils";
 import { siteConfig } from "~/config";
 import { Providers } from "~/components/providers";
-import { cn } from "~/lib/utils";
 
 const font = League_Spartan({ subsets: ["latin"], weight: "500" });
 
 export const metadata: Metadata = {
-  // metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
   title: {
-    default: `${siteConfig.name} - ${siteConfig.description}`,
+    default: `${siteConfig.name}.`,
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  // manifest: "/manifest.json",
   keywords: [
     "Next.js",
     "Tailwind CSS",
@@ -27,6 +24,12 @@ export const metadata: Metadata = {
     "shadcn/ui",
     "Server Components",
     "Vercel",
+    "Typing",
+    "Tournament",
+    "UEFA",
+    "League",
+    "WPM",
+    "Typournament",
   ],
   authors: [
     {

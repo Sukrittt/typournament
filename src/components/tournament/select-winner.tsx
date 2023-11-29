@@ -56,7 +56,7 @@ export const SelectWinner: React.FC<SelectWinnerProps> = ({
             Select one participant to declare a winner.
           </motion.p>
         </div>
-        <ScrollArea className="h-[30rem] w-full rounded-md">
+        <ScrollArea className="h-[30rem] pr-3 w-full rounded-md">
           <div className="grid grid-cols-2 justify-center gap-4 items-center">
             {[participantOne, ...equalParticipants].map((participant) => (
               <ParticipantDetails

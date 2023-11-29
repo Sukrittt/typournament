@@ -22,18 +22,18 @@ export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
       </SheetTrigger>
       <SheetContent className="min-w-[600px]">
         <SheetHeader>
-          <SheetTitle>Tournament Requests</SheetTitle>
+          <SheetTitle>{siteConfig.name} Requests</SheetTitle>
           <SheetDescription>
             View your tournament requests and their status.
           </SheetDescription>
         </SheetHeader>
         <Separator className="my-4" />
         {data.requests.length === 0 && (
-          <p className="text-sm text-muted-foreground text-center">
+          <p className="text-sm text-muted-foreground text-center pt-4">
             There are currently no requests.
           </p>
         )}
-        <ScrollArea className="h-[36rem] w-full rounded-md">
+        <ScrollArea className="h-[36rem] pr-3 w-full rounded-md">
           <div className="flex flex-col gap-y-4">
             {data.requests.map((singleRequest) => (
               <RequestCard

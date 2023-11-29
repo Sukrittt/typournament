@@ -53,7 +53,7 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
             </Link>
           </div>
         )}
-        <ScrollArea className="h-[36rem] w-full rounded-md">
+        <ScrollArea className="h-[36rem] pr-3 w-full rounded-md">
           <div className="flex flex-col gap-y-4">
             {rounds.map((round) => (
               <RoundCard

@@ -23,6 +23,7 @@ import {
 } from "~/lib/validators";
 import { cn } from "~/lib/utils";
 import { trpc } from "~/trpc/client";
+import { siteConfig } from "~/config";
 import { Separator } from "~/components/ui/separator";
 
 export const CreateTournament = () => {
@@ -98,7 +99,7 @@ export const CreateTournament = () => {
           Go Back
         </Link>
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold">Create a Tournament</h1>
+          <h1 className="text-3xl font-bold">Create a {siteConfig.name}</h1>
           <p className="text-muted-foreground">
             Fill in the details below to create a new tournament
           </p>
@@ -111,7 +112,7 @@ export const CreateTournament = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tournament Name</FormLabel>
+                <FormLabel>{siteConfig.name} Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Type tournament name here." {...field} />
                 </FormControl>

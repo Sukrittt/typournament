@@ -26,6 +26,7 @@ export function DeleteTournamentDialog({
     trpc.tournament.deleteTournament.useMutation({
       onSuccess: () => {
         toast.success("Tournament deleted successfully.");
+        router.refresh();
         router.push(`/dashboard`);
       },
     });
