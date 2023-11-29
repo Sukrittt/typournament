@@ -40,8 +40,16 @@ export const CreateTournament = () => {
 
   const { mutate: createTournament, isLoading } =
     trpc.tournament.createTournament.useMutation({
-      onSuccess: ({ tournamentId }) => {
-        toast.success("Tournament created successfully.");
+      onSuccess: ({ tournamentId, fewInvalidUsers }) => {
+        if (fewInvalidUsers) {
+          toast.error(
+            "Few users were not found. Please check the emails you have entered or tell them to create an account."
+          );
+        } else {
+          toast.success(
+            "Tournament created successfully. Request sent to all the participants."
+          );
+        }
         form.reset();
         router.push(`/t/${tournamentId}`);
       },

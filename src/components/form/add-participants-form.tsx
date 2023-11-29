@@ -36,8 +36,14 @@ export const AddParticipantsForm = ({
 
   const { mutate: sendRequests, isLoading } =
     trpc.request.createRequests.useMutation({
-      onSuccess: () => {
-        toast.success("Request sent to the participants.");
+      onSuccess: ({ fewInvalidUsers }) => {
+        if (fewInvalidUsers) {
+          toast.error(
+            "Few users were not found. Please check the emails you have entered or tell them to create an account."
+          );
+        } else {
+          toast.success("Request sent to the participants.");
+        }
         form.reset();
         router.refresh();
         router.push(`/t/${tournamentId}/requests`);

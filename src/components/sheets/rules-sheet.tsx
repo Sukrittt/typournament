@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { BookOpen } from "lucide-react";
 
 import {
@@ -31,21 +30,18 @@ export const RulesSheet = () => {
             View the rules for {siteConfig.name}.
           </SheetDescription>
         </SheetHeader>
-        <Separator className="my-4" />
-        <ScrollArea className="h-[35rem] pr-3 w-full rounded-md">
+        <ScrollArea className="pt-6 h-[38rem] pr-3 w-full rounded-md">
           <div className="flex flex-col gap-y-6">
             {rules.map((rule, index) => (
-              <Fragment key={index}>
-                <div className="space-y-2">
-                  <h3 className="text-base font-medium">{rule.title}</h3>
-                  <Separator className="my-1" />
-                  {rule.steps.map((step, index) => (
-                    <p key={index} className="text-sm text-muted-foreground">
-                      {index + 1}. {step}
-                    </p>
-                  ))}
-                </div>
-              </Fragment>
+              <div key={index} className="space-y-2">
+                <h3 className="text-base font-medium">{rule.title}</h3>
+                <Separator className="my-1" />
+                {rule.steps.map((step, index) => (
+                  <p key={index} className="text-sm text-muted-foreground">
+                    {index + 1}. {step}
+                  </p>
+                ))}
+              </div>
             ))}
           </div>
           <p className="pt-5">

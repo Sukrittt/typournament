@@ -14,7 +14,7 @@ export const Leagues = async () => {
   }
 
   return (
-    <ScrollArea className="h-[28rem] px-6 w-full rounded-md">
+    <ScrollArea className="h-[28rem] pr-3 w-full rounded-md">
       <div className="grid grid-cols-3 gap-4">
         {leagues.map((league) => (
           <LeagueCard key={league.participation.id} league={league} />

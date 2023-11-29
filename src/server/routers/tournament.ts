@@ -124,14 +124,17 @@ export const tournamentRouter = createTRPCRouter({
       const tournamentId = parseInt(createdTournament.insertId);
 
       const caller = requestRouter.createCaller(ctx);
-      await caller.createRequests({ tournamentId, emailIds: input.emailIds });
+      const { fewInvalidUsers } = await caller.createRequests({
+        tournamentId,
+        emailIds: input.emailIds,
+      });
 
       await db.insert(participation).values({
         tournamentId,
         userId: ctx.userId,
       });
 
-      return { tournamentId };
+      return { tournamentId, fewInvalidUsers };
     }),
   updateTournament: privateProcedure
     .input(updateTournamentSchema)

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarCheck, CalendarDays, User, Users } from "lucide-react";
+import { CalendarCheck, CalendarDays, UserCog, Users } from "lucide-react";
 
 import { League } from "~/types";
 import {
@@ -25,7 +25,7 @@ export const LeagueCard = ({ league }: { league: League }) => {
 
   const leagueContent = [
     {
-      icon: User,
+      icon: UserCog,
       value: getCustomizedUserName({
         username: league.user.name,
       }),

@@ -173,6 +173,10 @@ export const requestRouter = createTRPCRouter({
           await sendRequest(ctx.userId, userId, input.tournamentId);
         })
       );
+
+      return {
+        fewInvalidUsers: input.emailIds.length !== requestedUserIds.length,
+      };
     }),
   deleteRequest: privateProcedure
     .input(z.object({ requestId: z.number() }))

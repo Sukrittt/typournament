@@ -31,7 +31,9 @@ export const Participants = async ({
         <h1 className="text-2xl font-bold">Participants</h1>
         <div className="flex justify-between items-center">
           <p className="text-muted-foreground">
-            There are {participants.length} participants in this{" "}
+            There {participants.length === 1 ? "is" : "are"}{" "}
+            {participants.length}{" "}
+            {participants.length === 1 ? "participant" : "participants"} in this{" "}
             {siteConfig.name.toLowerCase()}.
           </p>
           <Link
@@ -45,7 +47,7 @@ export const Participants = async ({
 
       <Separator className="my-4" />
 
-      <ScrollArea className="h-[28rem] pr-6 w-full rounded-md">
+      <ScrollArea className="h-[28rem] pr-3 w-full rounded-md">
         <div className="space-y-4">
           {participants.map(({ participation, user }) => (
             <ParticipantionCard
