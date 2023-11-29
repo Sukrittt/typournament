@@ -1,5 +1,6 @@
 import { db } from "~/db";
 import { eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 
 import { createRoundSchema } from "~/lib/validators";
 import { round, score, tournament } from "~/db/schema";
@@ -9,6 +10,25 @@ export const roundRouter = createTRPCRouter({
   addRound: privateProcedure
     .input(createRoundSchema)
     .mutation(async ({ input }) => {
+      const league = await db
+        .select()
+        .from(tournament)
+        .where(eq(tournament.id, input.tournamentId));
+
+      if (league.length === 0) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "This tournament was not found",
+        });
+      }
+
+      if (league[0].endedAt) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "This tournament has already ended",
+        });
+      }
+
       const createdRound = await db.insert(round).values({
         tournamentId: input.tournamentId,
         winnerId: input.winnerId,

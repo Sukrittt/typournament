@@ -2,17 +2,17 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { redirect } from "next/navigation";
 import { serverClient } from "~/trpc/server-client";
-import { ArrowLeft, Crown, LucideProps } from "lucide-react";
+import { ArrowLeft, Crown, LucideProps, Medal } from "lucide-react";
 
+import { siteConfig } from "~/config";
 import { getAuthSession } from "~/lib/auth";
 import UserAvatar from "~/components/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Separator } from "~/components/ui/separator";
-import { cn, getCustomizedUserName } from "~/lib/utils";
+import { cn, getCustomizedUserName, getFormattedDate } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { CustomToolTip } from "~/components/ui/custom-tooltip";
-import { ExtendedParticipantType, ExtendedRound, Trajectory } from "~/types";
 import { RecentForm } from "~/components/tournament/recent-form";
 import { CreatorSheet } from "~/components/creator/creator-sheet";
 import { useParticipantScores } from "~/hooks/useParticipantScores";
@@ -20,6 +20,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { ParticipantCard } from "~/components/card/participant-card";
 import { useSortedParticipants } from "~/hooks/useSortedParticipants";
 import { RecentPosition } from "~/components/tournament/recent-position";
+import { ExtendedParticipantType, ExtendedRound, Trajectory } from "~/types";
 import { PreviousRoundResults } from "~/components/rounds/prev-round-results";
 
 export const Tournament = async ({
@@ -77,13 +78,29 @@ export const Tournament = async ({
         <span className="pt-1">Go Back</span>
       </Link>
       {league.tournamentInfo.creatorId === session.user.id && (
-        <CreatorSheet tournamentId={tournamentId} />
+        <CreatorSheet
+          tournamentId={tournamentId}
+          tournamentEnded={!!league.tournamentInfo.winnerId}
+        />
       )}
       <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
         <div className="space-y-3">
-          <h2 className="sm:text-4xl md:text-5xl font-medium">
-            {league.tournamentInfo.name}
-          </h2>
+          <div className="">
+            {league.tournamentInfo.endedAt && (
+              <span className="text-sm text-muted-foreground">
+                {" "}
+                (Ended on{" "}
+                {getFormattedDate(
+                  league.tournamentInfo.endedAt,
+                  "dd MMMM, yyyy"
+                )}
+                )
+              </span>
+            )}
+            <h2 className="sm:text-4xl md:text-5xl font-medium">
+              {league.tournamentInfo.name}
+            </h2>
+          </div>
           <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
             Number of Participants: {league.participantCount}
           </p>
@@ -111,6 +128,8 @@ export const Tournament = async ({
                   participant,
                   index + 1
                 );
+                const leagueWinner =
+                  league.tournamentInfo.winnerId === participant.user.id;
 
                 return (
                   <Fragment key={participant.participation.id}>
@@ -123,6 +142,7 @@ export const Tournament = async ({
                       participants={sortedParticipants}
                       highestWPM={highestWPM}
                       trajectory={participantTrajectory}
+                      leagueWinner={leagueWinner}
                     />
                     {index < league.participants.length - 1 && <Separator />}
                   </Fragment>
@@ -137,11 +157,14 @@ export const Tournament = async ({
           participants={sortedParticipants}
           tournamentId={tournamentId}
           rounds={league.rounds}
+          tournamentEnded={!!league.tournamentInfo.winnerId}
         />
-        <Link className={buttonVariants()} href={`/t/${tournamentId}/add`}>
-          <span className="pt-0.5">Add Round Results</span>
-          <IconArrowright className="ml-2 h-4 w-4" />
-        </Link>
+        {!league.tournamentInfo.winnerId && (
+          <Link className={buttonVariants()} href={`/t/${tournamentId}/add`}>
+            <span className="pt-0.5">Add Round Results</span>
+            <IconArrowright className="ml-2 h-4 w-4" />
+          </Link>
+        )}
       </div>
     </section>
   );
@@ -156,6 +179,7 @@ interface ParticipantRowProps {
   highestWPM: number | null;
   participants: ExtendedParticipantType[];
   trajectory: Trajectory;
+  leagueWinner: boolean;
 }
 const ParticipantRow = ({
   participant,
@@ -166,6 +190,7 @@ const ParticipantRow = ({
   participants,
   highestWPM,
   trajectory,
+  leagueWinner,
 }: ParticipantRowProps) => {
   const { totalWins, totalLoss, totalDraw, totalPlayed, recentForm } =
     useParticipantScores({
@@ -177,18 +202,39 @@ const ParticipantRow = ({
   }); //use short for sm device
 
   return (
-    <div className="grid grid-cols-14 py-2 text-neutral-200 items-center relative">
+    <div
+      className={cn(
+        "grid grid-cols-14 py-2 text-neutral-200 items-center relative",
+        {
+          "text-yellow-600": leagueWinner,
+        }
+      )}
+    >
       {highestWPM && (
         <CustomToolTip
           content={<p className="text-xs">Highest Average: {highestWPM} WPM</p>}
         >
-          <Badge className="absolute left-6 top-[13px] rounded-full p-0.5 pl-[2.5px]">
-            <Crown className="h-3 w-3 rounded-full" />
+          <Badge className="absolute left-6 top-[15px] rounded-full p-0.5 pl-[2.5px]">
+            <Medal className="h-3 w-3 rounded-full" />
           </Badge>
         </CustomToolTip>
       )}
       <div className="flex justify-center pl-3 items-center gap-x-3 col-span-2">
-        <p>{position}</p>
+        {leagueWinner ? (
+          <CustomToolTip
+            content={
+              <p className="text-xs">
+                Champion of this {siteConfig.name.toLowerCase()}.
+              </p>
+            }
+          >
+            <Badge className="rounded-full p-0.5 pl-[2.255px]">
+              <Crown className="h-3 w-3 rounded-full text-black" />
+            </Badge>
+          </CustomToolTip>
+        ) : (
+          <p>{position}</p>
+        )}
         <RecentPosition trajectory={trajectory} />
       </div>
       <ParticipantCard participant={participant}>

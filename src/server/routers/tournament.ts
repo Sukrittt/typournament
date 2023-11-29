@@ -151,7 +151,7 @@ export const tournamentRouter = createTRPCRouter({
       if (!existingTournament) {
         return new TRPCError({
           code: "NOT_FOUND",
-          message: "Tournament not found",
+          message: "Tournament was not found.",
         });
       }
 
@@ -192,7 +192,7 @@ export const tournamentRouter = createTRPCRouter({
       if (!existingTournament) {
         return new TRPCError({
           code: "NOT_FOUND",
-          message: "This tournament not found.",
+          message: "This tournament was not found.",
         });
       }
 
@@ -220,6 +220,70 @@ export const tournamentRouter = createTRPCRouter({
       ];
 
       await Promise.all(promises);
+    }),
+  endTournament: privateProcedure
+    .input(z.object({ tournamentId: z.number(), participantId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const existingTournaments = await db
+        .select()
+        .from(tournament)
+        .where(
+          and(
+            eq(tournament.id, input.tournamentId),
+            eq(tournament.creatorId, ctx.userId)
+          )
+        );
+
+      const existingTournament = existingTournaments[0];
+
+      if (!existingTournament) {
+        return new TRPCError({
+          code: "NOT_FOUND",
+          message: "This tournament was not found.",
+        });
+      }
+
+      if (existingTournament.creatorId !== ctx.userId) {
+        return new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "You are not authorized to make changes for this tournament.",
+        });
+      }
+
+      const rawParticipant = await db
+        .select()
+        .from(participation)
+        .where(eq(participation.id, input.participantId));
+      const participant = rawParticipant[0];
+
+      if (!participant) {
+        return new TRPCError({
+          code: "NOT_FOUND",
+          message: "This participant was not found.",
+        });
+      }
+
+      const rawWinner = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, participant.userId));
+      const winner = rawWinner[0];
+
+      if (!winner) {
+        return new TRPCError({
+          code: "NOT_FOUND",
+          message: "This participant was not found.",
+        });
+      }
+
+      await db
+        .update(tournament)
+        .set({
+          winnerId: winner.id,
+          endedAt: new Date(),
+        })
+        .where(eq(tournament.id, input.tournamentId));
     }),
 });
 

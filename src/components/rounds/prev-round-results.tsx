@@ -18,6 +18,7 @@ import { ExtendedParticipantType, ExtendedRound } from "~/types";
 interface PreviousRoundResultsProps {
   rounds: ExtendedRound[];
   participants: ExtendedParticipantType[];
+  tournamentEnded: boolean;
   tournamentId: number;
 }
 
@@ -25,6 +26,7 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
   rounds,
   participants,
   tournamentId,
+  tournamentEnded,
 }) => {
   return (
     <Sheet>
@@ -41,7 +43,7 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
           </SheetDescription>
         </SheetHeader>
         <Separator className="my-4" />
-        {rounds.length === 0 && (
+        {!tournamentEnded && rounds.length === 0 && (
           <div className="w-full flex justify-center">
             <Link
               className={cn(buttonVariants({ variant: "link" }), "text-center")}

@@ -41,7 +41,7 @@ export const RevealWinner: FC<RevealWinnerProps> = ({
         setStartFireWorks={setStartFireWorks}
       />
       <div className="flex flex-col gap-y-2">
-        {newRecord && (
+        {winner && loser && newRecord && (
           <motion.div
             className="text-sm text-muted-foreground"
             variants={TextVariants}

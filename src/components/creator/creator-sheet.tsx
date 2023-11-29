@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Hourglass, LockKeyhole, Settings, Users } from "lucide-react";
 
 import {
@@ -11,8 +12,15 @@ import {
 } from "~/components/ui/sheet";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
+import { EndTournamentDialog } from "../end-tournament-dialog";
 
-export const CreatorSheet = ({ tournamentId }: { tournamentId: number }) => {
+export const CreatorSheet = ({
+  tournamentId,
+  tournamentEnded,
+}: {
+  tournamentId: number;
+  tournamentEnded: boolean;
+}) => {
   const creatorList = [
     {
       label: "Manage Tournament",
@@ -56,6 +64,9 @@ export const CreatorSheet = ({ tournamentId }: { tournamentId: number }) => {
               </div>
             </Link>
           ))}
+          {!tournamentEnded && (
+            <EndTournamentDialog tournamentId={tournamentId} />
+          )}
         </div>
       </SheetContent>
     </Sheet>

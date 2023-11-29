@@ -5,10 +5,9 @@ import { useState } from "react";
 import { ExtendedParticipantType, RoundFlow } from "~/types";
 
 import { User } from "~/db/schema";
-import { AddRound } from "~/components/add-round";
-import { SelectParticipants } from "~/components/round-creation/select-participants";
-import { AnnounceWinner } from "~/components/round-creation/announce-winner";
 import { AddResults } from "~/components/round-creation/add-results";
+import { AnnounceWinner } from "~/components/round-creation/announce-winner";
+import { SelectParticipants } from "~/components/round-creation/select-participants";
 
 type Participant = Omit<ExtendedParticipantType, "scores">;
 
