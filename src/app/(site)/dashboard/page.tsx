@@ -15,7 +15,7 @@ import { UserCard } from "~/components/card/user-card";
 import { buttonVariants } from "~/components/ui/button";
 import { RulesSheet } from "~/components/sheets/rules-sheet";
 
-export const dynamic = "force-dyamic";
+export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
 export default async function Dashboard() {
