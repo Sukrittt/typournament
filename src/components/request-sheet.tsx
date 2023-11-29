@@ -9,6 +9,7 @@ import {
 import { siteConfig } from "~/config";
 import { ExtendedRequest } from "~/types";
 import { Separator } from "~/components/ui/separator";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { RequestCard } from "~/components/card/request-card";
 
 export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
@@ -32,15 +33,17 @@ export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
             There are currently no requests.
           </p>
         )}
-        <div className="flex flex-col gap-y-4">
-          {data.requests.map((singleRequest) => (
-            <RequestCard
-              key={singleRequest.request.id}
-              requestData={singleRequest}
-              tournament={data.tournament}
-            />
-          ))}
-        </div>
+        <ScrollArea className="h-[36rem] w-full rounded-md">
+          <div className="flex flex-col gap-y-4">
+            {data.requests.map((singleRequest) => (
+              <RequestCard
+                key={singleRequest.request.id}
+                requestData={singleRequest}
+                tournament={data.tournament}
+              />
+            ))}
+          </div>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );

@@ -203,14 +203,23 @@ export const tournamentRouter = createTRPCRouter({
         });
       }
 
-      await db
-        .delete(tournament)
-        .where(
-          and(
-            eq(tournament.id, input.tournamentId),
-            eq(tournament.creatorId, ctx.userId)
-          )
-        );
+      const promises = [
+        db
+          .delete(participation)
+          .where(eq(participation.tournamentId, input.tournamentId)),
+        db.delete(request).where(eq(request.tournamentId, input.tournamentId)),
+        db.delete(round).where(eq(round.tournamentId, input.tournamentId)),
+        db
+          .delete(tournament)
+          .where(
+            and(
+              eq(tournament.id, input.tournamentId),
+              eq(tournament.creatorId, ctx.userId)
+            )
+          ),
+      ];
+
+      await Promise.all(promises);
     }),
 });
 

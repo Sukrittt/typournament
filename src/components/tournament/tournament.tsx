@@ -57,11 +57,6 @@ export const Tournament = async ({
     );
     const prevRoundPosition = prevRoundParticipantIndex + 1;
 
-    console.log("                   ");
-    console.log("email", participant.user.email);
-    console.log("prevRoundPosition", prevRoundPosition);
-    console.log("currentPosition", currentPosition);
-
     if (prevRoundPosition === currentPosition) return "same";
 
     if (prevRoundPosition > currentPosition) return "up";

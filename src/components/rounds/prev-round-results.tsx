@@ -11,6 +11,7 @@ import {
 import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
 import { RoundCard } from "~/components/card/round-card";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { ExtendedParticipantType, ExtendedRound } from "~/types";
 
@@ -50,15 +51,17 @@ export const PreviousRoundResults: React.FC<PreviousRoundResultsProps> = ({
             </Link>
           </div>
         )}
-        <div className="flex flex-col gap-y-4">
-          {rounds.map((round) => (
-            <RoundCard
-              key={round.round.id}
-              round={round}
-              participants={participants}
-            />
-          ))}
-        </div>
+        <ScrollArea className="h-[36rem] w-full rounded-md">
+          <div className="flex flex-col gap-y-4">
+            {rounds.map((round) => (
+              <RoundCard
+                key={round.round.id}
+                round={round}
+                participants={participants}
+              />
+            ))}
+          </div>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );

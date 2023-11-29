@@ -50,9 +50,11 @@ export function DeleteTournamentDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>
+            <span className="pt-1">Cancel</span>
+          </AlertDialogCancel>
           <AlertDialogAction onClick={() => deleteTournament({ tournamentId })}>
-            Continue
+            <span className="pt-1">Continue</span>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
