@@ -56,7 +56,14 @@ export const TournementEndCard: React.FC<TournementEndCardProps> = ({
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className="ml-2 py-2 w-[18rem] relative">
-        <Crown className="w-4 h-4 text-yellow-500 absolute right-2 top-2" />
+        <div className="absolute right-2 top-2 py-0.5 px-2.5 rounded-full bg-gradient-to-r from-[#000] via-[#1e1e1e] to-[#000]">
+          <div className="flex items-center gap-x-1">
+            <span className="text-white text-[10px] font-normal pt-0.5">
+              Champion
+            </span>
+            <Crown className="w-3 h-3 text-yellow-500" />
+          </div>
+        </div>
         <div className="flex gap-x-4">
           <UserAvatar user={winner} />
           <div className="space-y-0.5">
