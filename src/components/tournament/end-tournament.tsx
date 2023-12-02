@@ -87,7 +87,7 @@ export const EndTournament = async ({
         </p>
 
         <Separator className="my-2" />
-        <div className="flex gap-x-2 items-center">
+        <div className="flex flex-col sm:flex-row gap-x-2 items-center">
           {creatorList.map((list, index) => (
             <Link
               key={index}

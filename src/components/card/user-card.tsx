@@ -1,10 +1,14 @@
+import { Crown } from "lucide-react";
+
 import { User } from "next-auth";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "~/components/ui/hover-card";
-import { getCustomizedUserName } from "~/lib/utils";
+import { siteConfig } from "~/config";
+import UserAvatar from "~/components/avatar";
+import { getCustomizedUserName, getFormattedDate } from "~/lib/utils";
 
 interface UserCardProps {
   user: User;
@@ -20,10 +24,49 @@ export const UserCard: React.FC<UserCardProps> = ({ user, children }) => {
       <HoverCardContent className="ml-2 py-2">
         <div className="flex gap-x-4">
           <div className="space-y-1">
+            <h4 className="text-sm text-left">
+              Username:{" "}
+              <span className="font-semibold">@{username.toLowerCase()}</span>
+            </h4>
+            <p className="text-sm">
+              Email: <span className="font-semibold">{user.email}</span>
+            </p>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+};
+
+interface TournementEndCardProps {
+  winner: User;
+  children: React.ReactNode;
+  endedAt: Date;
+}
+
+export const TournementEndCard: React.FC<TournementEndCardProps> = ({
+  winner,
+  children,
+  endedAt,
+}) => {
+  const username = getCustomizedUserName({ username: winner.name ?? "" });
+  const endedOn = getFormattedDate(endedAt, "MMM dd, yy");
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+      <HoverCardContent className="ml-2 py-2 w-[18rem] relative">
+        <Crown className="w-4 h-4 text-yellow-500 absolute right-2 top-2" />
+        <div className="flex gap-x-4">
+          <UserAvatar user={winner} />
+          <div className="space-y-0.5">
             <h4 className="text-sm font-semibold text-left">
               @{username.toLowerCase()}
             </h4>
-            <p className="text-sm">{user.email}</p>
+            <p className="text-sm">{winner.email}</p>
+            <p className="text-xs text-muted-foreground">
+              {siteConfig.name} ended on {endedOn}
+            </p>
           </div>
         </div>
       </HoverCardContent>

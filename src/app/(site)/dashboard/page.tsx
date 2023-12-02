@@ -33,8 +33,8 @@ export default async function Dashboard() {
           <Logout />
         </div>
       </div>
-      <div className="h-screen pt-28 flex w-[64rem] flex-col gap-y-8 ">
-        <div className="flex items-center justify-between w-full">
+      <div className="h-screen pt-28 flex px-8 w-[64rem] flex-col gap-y-8 ">
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between w-full">
           <h1 className="text-2xl font-extrabold text-popover-foreground">
             {siteConfig.name}.
           </h1>

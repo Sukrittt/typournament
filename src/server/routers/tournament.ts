@@ -25,6 +25,20 @@ import {
 import { ExtendedRound } from "~/types";
 import { requestRouter } from "~/server/routers/request";
 
+const getWinner = async (tournamentId: number) => {
+  const winnerDetails = await db
+    .select()
+    .from(tournament)
+    .innerJoin(users, eq(users.id, tournament.winnerId))
+    .orderBy(desc(tournament.createdAt));
+
+  if (winnerDetails.length === 0) return null;
+
+  const winner = winnerDetails.map((winner) => winner.user);
+
+  return winner[0];
+};
+
 export const tournamentRouter = createTRPCRouter({
   getUserParticipations: privateProcedure.query(async ({ ctx }) => {
     const userParticipations = await db
@@ -37,16 +51,19 @@ export const tournamentRouter = createTRPCRouter({
 
     const caller = participationRouter.createCaller(ctx);
 
-    const tournamentsWithParticipantCount = await Promise.all(
+    const tournamentsWithParticipantCountAndWinner = await Promise.all(
       userParticipations.map(async (league) => {
         const participantCount = await caller.getParticipantCount({
           tournamentId: league.tournament.id,
         });
-        return { ...league, participantCount };
+
+        const winner = await getWinner(league.tournament.id);
+
+        return { ...league, participantCount, winner };
       })
     );
 
-    return tournamentsWithParticipantCount;
+    return tournamentsWithParticipantCountAndWinner;
   }),
   getLeague: privateProcedure
     .input(

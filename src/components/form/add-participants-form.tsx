@@ -17,6 +17,7 @@ import {
 } from "~/lib/validators";
 import { cn } from "~/lib/utils";
 import { trpc } from "~/trpc/client";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 export const AddParticipantsForm = ({
   tournamentId,
@@ -90,7 +91,7 @@ export const AddParticipantsForm = ({
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center w-full max-w-md space-y-8">
+    <div className="h-screen flex flex-col justify-center w-full px-8 max-w-md space-y-8">
       <div className="space-y-2">
         <Link
           href={`/t/${tournamentId}/requests`}
@@ -118,28 +119,30 @@ export const AddParticipantsForm = ({
               onChange={(e) => setEmail(e.target.value)}
             />
             <Button type="button" onClick={handleAddEmail}>
-              <Plus className="h-4 w-4 mr-2" />{" "}
-              <span className="pt-1">Add Participant</span>
+              <Plus className="h-4 w-4 md:mr-2" />
+              <span className="pt-1 hidden md:block">Add Participant</span>
             </Button>
           </div>
 
           {validEmailDisplay && <Separator />}
 
           {validEmailDisplay && (
-            <div className="flex flex-col gap-y-2">
-              {form.getValues().emailIds.map((emailId, index) => (
-                <div key={index} className="flex gap-x-2">
-                  <Input value={emailId} type="email" disabled />
-                  <Button
-                    type="button"
-                    onClick={() => handleDeleteEmail(index)}
-                    variant="outline"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
+            <ScrollArea className="h-[8rem] md:h-auto max-h-[8rem] pr-3 w-full rounded-md">
+              <div className="flex flex-col gap-y-2">
+                {form.getValues().emailIds.map((emailId, index) => (
+                  <div key={index} className="flex gap-x-2">
+                    <Input value={emailId} type="email" disabled />
+                    <Button
+                      type="button"
+                      onClick={() => handleDeleteEmail(index)}
+                      variant="outline"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>

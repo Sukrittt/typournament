@@ -69,6 +69,7 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground dark;
@@ -101,6 +102,8 @@ body:after {
 }
 
 
-.grid-cols-14{
-  grid-template-columns: repeat(14, minmax(0, 1fr));
+@media (min-width: 768px) {
+  .md\:grid-cols-14 {
+      grid-template-columns: repeat(14, minmax(0, 1fr));
+  }
 }

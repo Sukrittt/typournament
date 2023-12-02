@@ -76,7 +76,18 @@ export const AddResults: FC<AddResulsProps> = ({
   );
 
   const isValidated = () => {
+    if (
+      participantOneRounds.length === 0 ||
+      participantTwoRounds.length === 0
+    ) {
+      return false;
+    }
+
     for (const round of participantOneRounds) {
+      if (round.length === 0) {
+        return false;
+      }
+
       if (!isValidFloat(parseFloat(round))) {
         return false;
       }
@@ -232,7 +243,7 @@ export const AddResults: FC<AddResulsProps> = ({
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        className="flex flex-col gap-y-8"
+        className="flex flex-col gap-y-16 md:gap-y-8 px-8"
         variants={RoundComponentVariants}
         initial="initial"
         animate="animate"

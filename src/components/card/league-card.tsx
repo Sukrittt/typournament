@@ -1,7 +1,14 @@
 import Link from "next/link";
-import { CalendarCheck, CalendarDays, UserCog, Users } from "lucide-react";
+import {
+  CalendarCheck,
+  CalendarDays,
+  Crown,
+  UserCog,
+  Users,
+} from "lucide-react";
 
 import { League } from "~/types";
+import { User } from "~/db/schema";
 import {
   Card,
   CardContent,
@@ -11,9 +18,15 @@ import {
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { buttonVariants } from "~/components/ui/button";
+import { TournementEndCard } from "~/components/card/user-card";
 import { cn, getCustomizedUserName, getFormattedDate } from "~/lib/utils";
 
-export const LeagueCard = ({ league }: { league: League }) => {
+interface LeagueCardProps {
+  league: League;
+  winner: User | null;
+}
+
+export const LeagueCard: React.FC<LeagueCardProps> = ({ league, winner }) => {
   const creationDate = getFormattedDate(
     league.tournament.createdAt,
     "MMM dd, yyyy"
@@ -45,7 +58,17 @@ export const LeagueCard = ({ league }: { league: League }) => {
   ];
 
   return (
-    <Card>
+    <Card className="relative">
+      {winner && league.tournament.endedAt && (
+        <div className="absolute top-2 right-2">
+          <TournementEndCard
+            winner={winner}
+            endedAt={league.tournament.endedAt}
+          >
+            <Crown className="w-4 h-4 text-yellow-500" />
+          </TournementEndCard>
+        </div>
+      )}
       <CardHeader className="py-3">
         <CardTitle className="text-xl truncate text-center">
           {league.tournament.name}

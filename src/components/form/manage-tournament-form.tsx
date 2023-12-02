@@ -60,7 +60,7 @@ export const ManageTournamentForm = ({
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center w-full max-w-md space-y-8">
+    <div className="h-screen flex flex-col justify-center w-full px-8 max-w-md space-y-8">
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Link

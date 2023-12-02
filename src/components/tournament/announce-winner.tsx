@@ -66,11 +66,7 @@ export const AnnounceWinner: React.FC<AnnounceWinnerProps> = ({
     return () => sound?.unload();
   }, [sound]);
 
-  const { mutate: endTournament } = trpc.tournament.endTournament.useMutation({
-    onSuccess: () => {
-      router.refresh();
-    },
-  });
+  const { mutate: endTournament } = trpc.tournament.endTournament.useMutation();
 
   useEffect(() => {
     if (winningParticipant) {

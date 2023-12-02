@@ -76,7 +76,7 @@ export const SelectParticipants: FC<SelectParticipantsProps> = ({
         exit="exit"
       >
         <div className="flex flex-col gap-y-12 items-center">
-          <div className="flex gap-x-8">
+          <div className="flex flex-col md:flex-row items-center gap-8">
             <Select onValueChange={(value) => handleSetUser(value, "one")}>
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Select participant" />

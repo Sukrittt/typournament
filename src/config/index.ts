@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "Typournament",
   description: "A tournament platform for typing enthusiasts.",
+  url: "https://typournament.vercel.app",
 };
 
 export const RoundScenario = {

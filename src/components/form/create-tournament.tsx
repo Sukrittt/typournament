@@ -25,6 +25,7 @@ import { cn } from "~/lib/utils";
 import { trpc } from "~/trpc/client";
 import { siteConfig } from "~/config";
 import { Separator } from "~/components/ui/separator";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 export const CreateTournament = () => {
   const router = useRouter();
@@ -95,7 +96,7 @@ export const CreateTournament = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center w-full max-w-md space-y-8">
+    <div className="h-screen flex flex-col justify-center w-full px-8 max-w-md space-y-8">
       <div className="space-y-2">
         <Link
           href="/dashboard"
@@ -128,7 +129,7 @@ export const CreateTournament = () => {
               </FormItem>
             )}
           />
-          <div className="flex gap-x-2">
+          <div className="flex flex-row gap-x-2">
             <Input
               value={email}
               type="email"
@@ -136,28 +137,30 @@ export const CreateTournament = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <Button type="button" onClick={handleAddEmail}>
-              <Plus className="h-4 w-4 mr-2" />{" "}
-              <span className="pt-1">Add Participant</span>
+              <Plus className="h-4 w-4 sm:mr-2" />
+              <span className="pt-1 hidden sm:block">Add Participant</span>
             </Button>
           </div>
 
           {validEmailDisplay && <Separator />}
 
           {validEmailDisplay && (
-            <div className="flex flex-col gap-y-2">
-              {form.getValues().emailIds.map((emailId, index) => (
-                <div key={index} className="flex gap-x-2">
-                  <Input value={emailId} type="email" disabled />
-                  <Button
-                    type="button"
-                    onClick={() => handleDeleteEmail(index)}
-                    variant="outline"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
+            <ScrollArea className="h-[8rem] md:h-auto max-h-[8rem] pr-3 w-full rounded-md">
+              <div className="flex flex-col gap-y-2">
+                {form.getValues().emailIds.map((emailId, index) => (
+                  <div key={index} className="flex gap-x-2">
+                    <Input value={emailId} type="email" disabled />
+                    <Button
+                      type="button"
+                      onClick={() => handleDeleteEmail(index)}
+                      variant="outline"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>

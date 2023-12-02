@@ -35,7 +35,7 @@ export const SelectWinner: React.FC<SelectWinnerProps> = ({
 }) => {
   return (
     <AnimatePresence mode="wait">
-      <div className="flex flex-col gap-y-8 pt-10">
+      <div className="flex flex-col gap-y-8 pt-10 px-8">
         <div className="space-y-1">
           <motion.h1
             className="text-2xl font-extrabold text-center"
@@ -56,8 +56,8 @@ export const SelectWinner: React.FC<SelectWinnerProps> = ({
             Select one participant to declare a winner.
           </motion.p>
         </div>
-        <ScrollArea className="h-[30rem] pr-3 w-full rounded-md">
-          <div className="grid grid-cols-2 justify-center gap-4 items-center">
+        <ScrollArea className="h-[30rem] pr-3 w-full rounded-md pb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 justify-center gap-4 items-center">
             {[participantOne, ...equalParticipants].map((participant) => (
               <ParticipantDetails
                 key={participant.user.id}

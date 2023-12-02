@@ -20,7 +20,7 @@ export const RequestSheet = ({ data }: { data: ExtendedRequest }) => {
           {siteConfig.name} Requests ({data.requests.length})
         </span>
       </SheetTrigger>
-      <SheetContent className="min-w-[600px]">
+      <SheetContent className="sm:min-w-[600px]">
         <SheetHeader>
           <SheetTitle>{siteConfig.name} Requests</SheetTitle>
           <SheetDescription>

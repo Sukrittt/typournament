@@ -85,6 +85,7 @@ export const ShowWinner: React.FC<ShowWinnerProps> = ({
           initial="initial"
           animate="animate"
           exit="exit"
+          className="px-8"
         >
           <Card className="max-w-md">
             <CardHeader>

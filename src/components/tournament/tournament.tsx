@@ -66,7 +66,7 @@ export const Tournament = async ({
   };
 
   return (
-    <section className="w-full pt-12 md:pt-24 lg:pt-32">
+    <section className="w-full pt-24 lg:pt-32">
       <Link
         href="/dashboard"
         className={cn(
@@ -97,7 +97,7 @@ export const Tournament = async ({
                 )
               </span>
             )}
-            <h2 className="sm:text-4xl md:text-5xl font-medium">
+            <h2 className="text-4xl md:text-5xl font-medium">
               {league.tournamentInfo.name}
             </h2>
           </div>
@@ -105,18 +105,24 @@ export const Tournament = async ({
             Number of Participants: {league.participantCount}
           </p>
         </div>
-        <Card className="shadow-sm rounded-lg">
+        <Card className="shadow-sm rounded-lg xl:min-w-[62.5rem]">
           <CardHeader className="p-3 text-sm text-muted-foreground">
-            <div className="grid grid-cols-14 font-semibold items-center">
-              <p className="mx-4 col-span-2">Position</p>
-              <p className="text-left mx-4 col-span-2">Name</p>
-              <p className="mx-4">Played</p>
-              <p className="mx-4">Won</p>
-              <p className="mx-4">Drawn</p>
-              <p className="mx-4">Lost</p>
-              <p className="mx-4">Avg</p>
-              <p className="mx-4">Points</p>
-              <p className="col-span-4">Form</p>
+            <div className="grid grid-cols-9 md:grid-cols-14 font-semibold items-center">
+              <p className="mr-4 col-span-2 hidden md:block">Position</p>
+              <p className="mr-4 col-span-2 md:hidden">Pos</p>
+              <p className="text-left mr-4 col-span-2">Name</p>
+              <p className="mr-4 hidden md:block">Played</p>
+              <p className="mr-4 md:hidden">Pl</p>
+              <p className="mr-4 hidden md:block">Won</p>
+              <p className="mr-4 md:hidden">W</p>
+              <p className="mr-4 hidden md:block">Drawn</p>
+              <p className="mr-4 md:hidden">D</p>
+              <p className="mr-4 hidden md:block">Lost</p>
+              <p className="mr-4 md:hidden">L</p>
+              <p className="hidden md:block mr-4">Avg</p>
+              <p className="mr-4 hidden md:block">Points</p>
+              <p className="mr-4 md:hidden">Pts</p>
+              <p className="hidden md:block col-span-4">Form</p>
             </div>
           </CardHeader>
           <Separator />
@@ -199,12 +205,17 @@ const ParticipantRow = ({
     });
   const participantName = getCustomizedUserName({
     username: participant.user.name,
-  }); //use short for sm device
+  });
+
+  const shortParticipantName = getCustomizedUserName({
+    username: participant.user.name,
+    type: "shortname",
+  });
 
   return (
     <div
       className={cn(
-        "grid grid-cols-14 py-2 text-neutral-200 items-center relative",
+        "grid grid-cols-9 md:grid-cols-14 py-2 text-neutral-200 items-center relative",
         {
           "text-yellow-600": leagueWinner,
         }
@@ -240,16 +251,21 @@ const ParticipantRow = ({
       <ParticipantCard participant={participant}>
         <div className="flex gap-x-2 items-center col-span-2">
           <UserAvatar user={participant.user} className="h-5 w-5" />
-          <p className="font-medium text-lg pt-1">{participantName}</p>
+          <p className="hidden sm:block font-medium text-lg pt-1">
+            {participantName}
+          </p>
+          <p className="sm:hidden font-medium text-lg pt-1">
+            {shortParticipantName}
+          </p>
         </div>
       </ParticipantCard>
       <p className="text-sm">{totalPlayed}</p>
       <p className="text-sm">{totalWins}</p>
       <p className="text-sm">{totalDraw}</p>
       <p className="text-sm">{totalLoss}</p>
-      <p className="text-sm">{totalAvg.toFixed(2)}</p>
+      <p className="text-sm hidden md:block">{totalAvg.toFixed(2)}</p>
       <p className="text-sm">{totalPoints}</p>
-      <div className="flex justify-around items-center col-span-4">
+      <div className="hidden md:flex justify-around items-center col-span-4">
         {recentForm.map((roundResult, index) => (
           <RecentForm
             key={index}

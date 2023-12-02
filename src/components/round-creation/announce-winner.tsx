@@ -121,7 +121,7 @@ export const AnnounceWinner: FC<AnnounceWinnerProps> = ({
   }, [sound]);
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center px-8">
       {announcementStep === "thrill" && (
         <motion.h1
           className="text-2xl font-extrabold"
