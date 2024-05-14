@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.18.3",
-    "@auth/drizzle-adapter": "^0.3.8",
+    "@auth/drizzle-adapter": "^1.1.0",
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
