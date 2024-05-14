@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { db } from "~/db";
 import { users } from "~/db/schema";
-// import { Adapter } from "next-auth/adapters";
+import { Adapter } from "next-auth/adapters";
 import { getServerSession, type NextAuthOptions } from "next-auth";
 
 function getGithubCredentials() {
@@ -39,8 +39,7 @@ function getGoogleCredentials() {
 }
 
 export const authOptions: NextAuthOptions = {
-  // @ts-expect-error
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db) as Adapter,
   session: {
     strategy: "jwt",
   },
