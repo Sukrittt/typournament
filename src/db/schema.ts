@@ -1,18 +1,18 @@
-import {
-  int,
-  timestamp,
-  mysqlTable,
-  primaryKey,
-  varchar,
-  serial,
-  text,
-  float,
-  boolean,
-} from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
 import type { AdapterAccount } from "@auth/core/adapters";
+import {
+  pgTable,
+  serial,
+  text,
+  varchar,
+  integer,
+  date,
+  numeric,
+  boolean,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 
-export const accounts = mysqlTable(
+export const accounts = pgTable(
   "account",
   {
     userId: varchar("userId", { length: 255 }).notNull(),
@@ -23,7 +23,7 @@ export const accounts = mysqlTable(
     providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
-    expires_at: int("expires_at"),
+    expires_at: integer("expires_at"),
     token_type: varchar("token_type", { length: 255 }),
     scope: varchar("scope", { length: 255 }),
     id_token: text("id_token"),
@@ -34,92 +34,89 @@ export const accounts = mysqlTable(
   })
 );
 
-export const sessions = mysqlTable("session", {
+export const sessions = pgTable("session", {
   sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
   userId: varchar("userId", { length: 255 }).notNull(),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
+  expires: date("expires", { mode: "date" }).notNull(),
 });
 
-export const verificationTokens = mysqlTable(
+export const verificationTokens = pgTable(
   "verificationToken",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
     token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
+    expires: date("expires", { mode: "date" }).notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey(vt.identifier, vt.token),
   })
 );
 
-export const users = mysqlTable("user", {
+export const users = pgTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("emailVerified", {
-    mode: "date",
-    fsp: 3,
-  }).defaultNow(),
+  emailVerified: date("emailVerified").defaultNow(),
   image: varchar("image", { length: 255 }),
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  createdAt: date("createdAt", { mode: "date" }).defaultNow(),
 });
 
-export const request = mysqlTable("request", {
+export const request = pgTable("request", {
   id: serial("id").primaryKey(),
 
   status: varchar("status", {
     length: 255,
     enum: ["pending", "accepted", "declined"],
   }).default("pending"),
-  tournamentId: int("tournamentId").notNull(),
+  tournamentId: integer("tournamentId").notNull(),
 
   senderId: varchar("senderId", { length: 255 }).notNull(),
   receiverId: varchar("receiverId", { length: 255 }).notNull(),
 
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  createdAt: date("createdAt", { mode: "date" }).defaultNow(),
 });
 
-export const tournament = mysqlTable("tournament", {
+export const tournament = pgTable("tournament", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   creatorId: varchar("creatorId", { length: 255 }).notNull(),
 
-  highestWPM: float("highestWPM"),
+  highestWPM: numeric("highestWPM"),
   highestWPMUserId: varchar("highestWPMUserId", { length: 255 }),
 
-  endedAt: timestamp("endedAt", { mode: "date" }),
+  endedAt: date("endedAt", { mode: "date" }),
   winnerId: varchar("winnerId", { length: 255 }),
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  createdAt: date("createdAt", { mode: "date" }).defaultNow(),
 });
 
-export const participation = mysqlTable("participation", {
+export const participation = pgTable("participation", {
   id: serial("id").primaryKey(),
 
   userId: varchar("userId", { length: 255 }).notNull(),
-  tournamentId: int("tournamentId").notNull(),
+  tournamentId: integer("tournamentId").notNull(),
 
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  createdAt: date("createdAt", { mode: "date" }).defaultNow(),
 });
 
-export const round = mysqlTable("round", {
+export const round = pgTable("round", {
   id: serial("id").primaryKey(),
 
   winnerId: varchar("winnerId", { length: 255 }),
-  tournamentId: int("tournamentId").notNull(),
+  tournamentId: integer("tournamentId").notNull(),
   draw: boolean("draw").default(false),
 
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  createdAt: date("createdAt", { mode: "date" }).defaultNow(),
 });
 
-export const score = mysqlTable("score", {
+export const score = pgTable("score", {
   id: serial("id").primaryKey(),
 
-  point: int("score").notNull(),
-  average: float("average").notNull(),
-  participationId: int("participationId").notNull(),
-  roundId: int("roundId").notNull(),
+  point: integer("score").notNull(),
+  average: numeric("average").notNull(),
+  participationId: integer("participationId").notNull(),
+  roundId: integer("roundId").notNull(),
 
-  createdAt: timestamp("createdAt", { mode: "date" }).defaultNow(),
+  createdAt: date("createdAt", { mode: "date" }).defaultNow(),
 });
 
 // --------------------------------RELATIONS--------------------------------------//

@@ -29,25 +29,28 @@ export const roundRouter = createTRPCRouter({
         });
       }
 
-      const createdRound = await db.insert(round).values({
-        tournamentId: input.tournamentId,
-        winnerId: input.winnerId,
-        draw: input.draw,
-      });
+      const createdRound = await db
+        .insert(round)
+        .values({
+          tournamentId: input.tournamentId,
+          winnerId: input.winnerId,
+          draw: input.draw,
+        })
+        .returning();
 
-      const roundId = parseInt(createdRound.insertId);
+      const roundId = createdRound[0].id;
 
       const promises = [
-        await db.insert(score).values({
+        db.insert(score).values({
           roundId: roundId,
           participationId: input.rounds[0].participationId,
-          average: input.rounds[0].average,
+          average: input.rounds[0].average.toString(),
           point: input.rounds[0].point,
         }),
-        await db.insert(score).values({
+        db.insert(score).values({
           roundId: roundId,
           participationId: input.rounds[1].participationId,
-          average: input.rounds[1].average,
+          average: input.rounds[1].average.toString(),
           point: input.rounds[1].point,
         }),
       ];
@@ -68,12 +71,12 @@ export const roundRouter = createTRPCRouter({
 
       if (
         !roundTournament.highestWPM ||
-        roundTournament.highestWPM < roundHighestWPM
+        parseInt(roundTournament.highestWPM) < roundHighestWPM
       ) {
         await db
           .update(tournament)
           .set({
-            highestWPM: roundHighestWPM,
+            highestWPM: roundHighestWPM.toString(),
             highestWPMUserId: input.winnerId,
           })
           .where(eq(tournament.id, input.tournamentId));

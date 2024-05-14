@@ -133,12 +133,15 @@ export const tournamentRouter = createTRPCRouter({
   createTournament: privateProcedure
     .input(createTournamentSchema)
     .mutation(async ({ ctx, input }) => {
-      const createdTournament = await db.insert(tournament).values({
-        name: input.name,
-        creatorId: ctx.userId,
-      });
+      const createdTournament = await db
+        .insert(tournament)
+        .values({
+          name: input.name,
+          creatorId: ctx.userId,
+        })
+        .returning();
 
-      const tournamentId = parseInt(createdTournament.insertId);
+      const tournamentId = createdTournament[0].id;
 
       const caller = requestRouter.createCaller(ctx);
       const { fewInvalidUsers } = await caller.createRequests({

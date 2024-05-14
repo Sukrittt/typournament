@@ -26,7 +26,7 @@ export const useSortedParticipants = ({
       (accumulator, score) => {
         return {
           totalPoints: accumulator.totalPoints + score.point,
-          totalAvgCount: accumulator.totalAvgCount + score.average,
+          totalAvgCount: accumulator.totalAvgCount + parseInt(score.average),
         };
       },
       { totalPoints: 0, totalAvgCount: 0 }
@@ -67,7 +67,7 @@ export const useSortedParticipants = ({
       participant.totalPoints - (prevRoundParticipantScore?.point ?? 0);
     const totalAvgCount =
       participant.totalAvg * participatedRounds.length -
-      (prevRoundParticipantScore?.average ?? 0);
+      (parseInt(prevRoundParticipantScore?.average ?? "0") ?? 0);
 
     const prevRoundParticipantDetails: SortedParticipantType = {
       ...participant,

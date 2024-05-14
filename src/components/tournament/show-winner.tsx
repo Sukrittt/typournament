@@ -41,7 +41,7 @@ export const ShowWinner: React.FC<ShowWinnerProps> = ({
     (accumulator, score) => {
       return {
         totalPoints: accumulator.totalPoints + score.point,
-        totalAvgCount: accumulator.totalAvgCount + score.average,
+        totalAvgCount: accumulator.totalAvgCount + parseInt(score.average),
       };
     },
     { totalPoints: 0, totalAvgCount: 0 }

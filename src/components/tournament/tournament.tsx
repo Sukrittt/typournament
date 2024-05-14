@@ -146,7 +146,7 @@ export const Tournament = async ({
                       participant={participant}
                       rounds={league.rounds}
                       participants={sortedParticipants}
-                      highestWPM={highestWPM}
+                      highestWPM={highestWPM ? parseInt(highestWPM) : null}
                       trajectory={participantTrajectory}
                       leagueWinner={leagueWinner}
                     />

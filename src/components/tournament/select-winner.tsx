@@ -97,7 +97,7 @@ const ParticipantDetails: React.FC<ParticipantDetailsProps> = ({
     (accumulator, score) => {
       return {
         totalPoints: accumulator.totalPoints + score.point,
-        totalAvgCount: accumulator.totalAvgCount + score.average,
+        totalAvgCount: accumulator.totalAvgCount + parseInt(score.average),
       };
     },
     { totalPoints: 0, totalAvgCount: 0 }
